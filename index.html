@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light dark"><title>Singandu Academia, formation informatique à Mbuji-Mayi</title>
-<meta name="description" content="Formations informatiques en ligne, à domicile ou au centre, et dépannage d’ordinateurs à Mbuji-Mayi. Apprendre, c’est conquérir l’invisible."><meta name="theme-color" content="#0a1470"><link rel="manifest" href="manifest.json"><link rel="icon" href="logo.jpg">
+<meta name="description" content="Formations informatiques en ligne, à domicile ou au centre, et dépannage d’ordinateurs à Mbuji-Mayi. Apprendre, c’est conquérir l’invisible."><meta name="theme-color" content="#0a1470"><link rel="manifest" href="manifest.json"><link rel="icon" href="logo.jpg"><link rel="apple-touch-icon" href="logo.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Singandu"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"EducationalOrganization","name":"Singandu Academia","telephone":"+243860269169","email":"singanduacademia@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Av. Cikapa, Q/Ciaciacia, n° 18, Kanshi","addressLocality":"Mbuji-Mayi","addressRegion":"Kasaï-Oriental","addressCountry":"CD"}}</script>
 <style>*{box-sizing:border-box;margin:0}:root{--navy:#0a1470;--blue:#1c2cb0;--sky:#eef1ff;--muted:#5b6192;--ink:#10153f;--yel:#ffd400;color-scheme:light;--bg:#f5f7ff;--card:#fff;--hdb:rgba(255,255,255,.93)}[data-th=dark]{--bg:#0b1030;--card:#151b4a;--sky:#1d2560;--ink:#e8ebff;--muted:#a3abe0;--hdb:rgba(11,16,48,.92);color-scheme:dark}
@@ -8,7 +8,7 @@ button{cursor:pointer;border:0;border-radius:999px;padding:10px 20px;font-weight
 input,select,textarea{width:100%;padding:12px 14px;border:1.5px solid #d6dcff;border-radius:12px;background:var(--card);color:var(--ink);-webkit-text-fill-color:var(--ink);margin:6px 0 12px;caret-color:#e5322d}input[type=checkbox]{width:auto;margin:0 8px 0 0}textarea{min-height:90px;resize:vertical}label{display:block;font-weight:600;font-size:.9rem}
 .hd{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 5vw;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--hdb);backdrop-filter:blur(8px);box-shadow:0 1px 0 #e0e5ff}.hd img{width:44px;height:44px;border-radius:50%}.hd b{flex:1;color:var(--ink)}
 .hero{min-height:calc(100vh - 150px);display:grid;place-items:center;text-align:center;padding:40px 6vw;color:#fff;background:linear-gradient(rgba(6,12,90,.84),rgba(10,20,112,.7)),url(teach.jpg) center/cover;animation:kb 18s ease-in-out infinite alternate}@keyframes kb{to{background-position:70% 40%}}
-.hero h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.15;max-width:15em;margin:0 auto 16px}.hero p{max-width:34em;margin:0 auto 12px;opacity:.93}.yb{background:var(--yel);color:#000;padding:16px 32px;font-size:1.05rem;margin-top:18px;box-shadow:0 10px 30px rgba(255,212,0,.35)}.msg{min-height:1.2em;color:#ffd4d2;margin-top:10px}
+.hero h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.15;max-width:15em;margin:0 auto 16px}.hero p{max-width:34em;margin:0 auto 12px;opacity:.93}.yb{background:#fff;color:var(--navy);padding:16px 32px;font-size:1.05rem;margin-top:18px;box-shadow:0 10px 30px rgba(255,255,255,.25)}.msg{min-height:1.2em;color:#ffd4d2;margin-top:10px}
 footer{padding:26px 6vw;text-align:center;color:var(--muted);font-size:.9rem}footer a{color:var(--blue);margin:0 8px;display:inline-block}
 #app{padding-bottom:90px}.wrap{max-width:720px;margin:0 auto;padding:16px 5vw}.pane{display:none}.pane.on{display:block}
 .pc,.card{background:var(--card);border-radius:18px;padding:16px;box-shadow:0 6px 24px rgba(10,20,112,.08);margin-bottom:16px}.card h3{margin-bottom:8px}
@@ -35,9 +35,43 @@ dialog{border:0;border-radius:20px;padding:22px;width:min(92vw,520px);background
 .rw{display:flex;gap:8px;margin:10px 0;align-items:flex-end}.rw.me{flex-direction:row-reverse}.bu{max-width:80%;padding:10px 14px;border-radius:18px;background:var(--card);box-shadow:0 2px 10px rgba(10,20,112,.08);overflow-wrap:anywhere}.rw.me .bu{background:var(--blue);color:#fff}.rw .ai{width:30px;height:30px;font-size:.9rem;background:linear-gradient(135deg,#6a4cff,#0a1470)}
 .dots i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);margin:0 2px;animation:dt 1s infinite}.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.sh{position:absolute;background:#fff;opacity:.11;pointer-events:none}
+.s1{width:min(46vw,380px);aspect-ratio:1;border-radius:50%;right:-12%;top:-14%}
+.s2{width:min(28vw,220px);aspect-ratio:1;border-radius:50%;left:-8%;bottom:6%}
+.s3{width:44px;height:44px;clip-path:polygon(0 0,100% 50%,0 100%);right:10%;bottom:14%;opacity:.45;animation:fl 4s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-14px) rotate(8deg)}}
+.hw{width:100%;max-width:1040px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:clamp(22px,4vh,38px)}
+.sc{position:relative;width:100%;min-height:480px}
+.sl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;visibility:hidden}
+.sl.on{visibility:visible}
+.sl .el{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
+.sl.on .el{opacity:1;transform:none;transition-delay:calc(var(--i)*.7s)}
+.sl.out .el{opacity:0;transform:translateX(-40px);transition:opacity .45s ease,transform .45s ease;transition-delay:calc(var(--i)*.06s)}
+.tx2{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:30rem}
+.sl h2{margin:0;font-size:clamp(1.7rem,5.4vw,2.9rem);line-height:1.15;font-weight:800}
+.sl p{margin:0;font-size:1.08rem;max-width:26em}
+.sl .tg{background:#fff;color:var(--navy);font-weight:700;font-size:.85rem;padding:6px 16px;border-radius:999px}
+.sl .ch{border:2px solid #fff;padding:9px 20px;border-radius:14px;font-weight:600}
+.vis{position:relative;width:150px;height:150px;border-radius:34px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.55);display:grid;place-items:center;font-size:3.6rem;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.28)}
+.vis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media(min-width:860px){
+.sc{min-height:380px}
+.sl{flex-direction:row;justify-content:space-between;gap:72px;padding:0 28px}
+.tx2{align-items:flex-start;text-align:left;max-width:none;flex:1.15}
+.sl p{max-width:24em}
+.vis{order:2;flex:.85;width:auto;max-width:340px;height:auto;aspect-ratio:1;font-size:6rem;border-radius:44px}}
+.cta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;width:100%}
+.cta button{flex:1 1 220px;max-width:340px;margin:0}
+.wb{background:transparent;color:#fff;border:2px solid #fff;padding:15px 26px;font-size:1rem}
+.hw .msg{margin:0;text-align:center}
+.dts{display:flex;gap:8px;justify-content:center}.dts i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:.3s}.dts i.on{width:26px;border-radius:6px;background:#fff}
+@media(prefers-reduced-motion:reduce){.sl .el,.sl.on .el{transition:none;transform:none}.s3{animation:none}}
+.sl .bt{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--navy);font-weight:800;text-decoration:none;padding:14px 24px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.22);cursor:pointer}.sl .bt::after{content:"";border-left:11px solid var(--blue);border-top:7px solid transparent;border-bottom:7px solid transparent}.sl.out{pointer-events:none}
 </style></head><body>
 <div id="land"><header class="hd"><img src="logo.jpg" alt=""><b>Singandu Academia</b></header>
-<section class="hero"><i class="bb" style="left:6%;--d:11s;width:30px;height:30px"></i><i class="bb" style="left:22%;--d:15s;width:18px;height:18px"></i><i class="bb" style="left:40%;--d:12s;width:44px;height:44px"></i><i class="bb" style="left:58%;--d:17s;width:24px;height:24px"></i><i class="bb" style="left:74%;--d:10s;width:36px;height:36px"></i><i class="bb" style="left:90%;--d:14s;width:20px;height:20px"></i><div><h1>Apprendre, c’est conquérir l’invisible.</h1><p>Formations informatiques en ligne, à domicile ou au centre, et dépannage d’ordinateurs à Mbuji-Mayi (RDC).</p><p>Av. Cikapa, Q/Ciaciacia n° 18, Kanshi, derrière l’école Case MIBA · 8 h 30 à 16 h 30</p><button id="go" class="yb">Connectez-vous pour continuer</button><p id="ge" class="msg"></p></div></section>
+<section class="hero"><i class="bb" style="left:6%;--d:11s;width:30px;height:30px"></i><i class="bb" style="left:22%;--d:15s;width:18px;height:18px"></i><i class="bb" style="left:40%;--d:12s;width:44px;height:44px"></i><i class="bb" style="left:58%;--d:17s;width:24px;height:24px"></i><i class="bb" style="left:74%;--d:10s;width:36px;height:36px"></i><i class="bb" style="left:90%;--d:14s;width:20px;height:20px"></i><i class="sh s1"></i><i class="sh s2"></i><i class="sh s3"></i><div class="hw"><h1 class="sr">Apprendre, c’est conquérir l’invisible.</h1><div id="sc" class="sc"></div><div class="cta"><button id="go" class="yb">Connectez-vous pour continuer</button><button id="bInst2" class="wb">📲 Télécharger l’application</button></div><p id="ge" class="msg"></p><div class="dts" id="sd"></div></div></section>
 <section class="stage"><canvas id="cv"></canvas></section>
 <footer><a href="https://www.facebook.com/share/1HuJEdoZg4/">Facebook</a><a href="https://www.youtube.com/@SingAcad">YouTube</a><a href="https://g.page/r/CdM76RwNaCdYEBI/review">Avis Google</a><br><a href="#" data-info="conf">Confidentialité</a><a href="#" data-info="reg">Règlement</a><a href="#" data-info="cgu">Conditions</a><br>© Singandu Academia</footer></div>
 <div id="app" hidden><header class="hd ah"><img src="logo.jpg" alt=""><div><b>Singandu Academia</b><small id="ttl">Accueil</small></div><span id="av"></span></header><div class="wrap">
@@ -159,7 +193,12 @@ $('#bSj').onclick=async()=>{try{await db.collection('config').doc('sujet').set({
 async function loadAdm(){try{const s=await db.collection('demandes').limit(60).get();const a=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(y.cree?.seconds||0)-(x.cree?.seconds||0));$('#rq').innerHTML=a.map(d=>`<div class="pc" style="box-shadow:none;background:var(--sky)"><b>${esc(d.nom)}</b> · ${esc(d.formation)} ${d.prix?'('+d.prix+' $)':''}<br><small>${esc(d.email||'')} ${esc(d.tel||'')} ${esc(d.note||'')}</small><br><b>${esc(d.statut)}</b> <button data-r="${d.id}" data-u="${d.uid}" data-f="${esc(d.formation)}" data-v="1">Valider</button> <button class="ghost" data-r="${d.id}" data-u="${d.uid}" data-f="${esc(d.formation)}" data-v="0">Refuser</button></div>`).join('')||'<p class="mu">Aucune demande.</p>'}catch(e){}loadAs();loadAdm2()}
 $('#rq').onclick=async e=>{const b=e.target.closest('[data-r]');if(!b)return;const v=b.dataset.v==='1';try{await db.collection('demandes').doc(b.dataset.r).update({statut:v?'validée':'refusée'});await db.collection('notifs').add({to:b.dataset.u,titre:'Votre demande',texte:'Votre demande « '+b.dataset.f+' » a été '+(v?'validée.':'refusée. Contactez-nous pour plus de détails.'),cree:TS()});loadAdm()}catch(x){alert('Échec.')}};
 let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e});
-$('#bInst').onclick=()=>{if(dp){dp.prompt();dp=null}else info('<h3>Installer l’application</h3><p>Android (Chrome) : menu ⋮, puis « Installer l’application ». iPhone (Safari) : bouton Partager, puis « Sur l’écran d’accueil ».</p>')};
+const instOK=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+function instGo(){if(dp){dp.prompt();dp.userChoice.catch(()=>{}).then(()=>{dp=null});return}
+const u=navigator.userAgent,ios=/iPhone|iPad|iPod/i.test(u),an=/Android/i.test(u);
+info('<h3>Installer l’application</h3>'+(ios?'<p><b>iPhone / iPad (Safari)</b> : touchez le bouton Partager, puis « Sur l’écran d’accueil ».</p>':an?'<p><b>Android (Chrome)</b> : touchez le menu ⋮, puis « Installer l’application ».</p>':'<p><b>Ordinateur (Chrome ou Edge)</b> : cliquez sur l’icône d’installation à droite de la barre d’adresse, ou sur le menu ⋮ puis « Installer Singandu Academia ».</p>')+'<p class="mu">Une fois installée, l’application s’ouvre comme un vrai logiciel, avec son icône.</p>')}
+$('#bInst').onclick=instGo;$('#bInst2').onclick=instGo;
+const hideInst=()=>{$('#bInst').hidden=true;$('#bInst2').hidden=true};if(instOK())hideInst();addEventListener('appinstalled',hideInst);
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 // ---- v8 ----
@@ -269,4 +308,27 @@ function draw(t){let i=0,a=t;while(a>=D[i]){a-=D[i];i++}const p=a/D[i];x.setTran
 function f(ms){requestAnimationFrame(f);fit();if(!lw||!c.clientWidth||!vis)return;if(rm){if(!dn){draw(TOT-2);dn=1}return}draw(((ms-t0)/1000)%TOT)}
 requestAnimationFrame(f);window.demoCard=card;
 })();
+
+// ---- accueil animé ----
+(function(){
+const SCENES=[
+{ico:'🎓',tag:'Singandu Academia',titre:'Apprendre, c’est conquérir l’invisible.',texte:'Formations informatiques à Mbuji-Mayi (RDC).',img:'photos/accueil-1.jpg',bt:{l:'S’inscrire',go:'form'}},
+{ico:'💻',tag:'Formations',titre:'En ligne, à domicile ou au centre.',puce:'Tous les niveaux, du débutant au confirmé',img:'photos/accueil-2.jpg',bt:{l:'Voir les formations',go:'form'}},
+{ico:'🛠️',tag:'Dépannage',titre:'Votre ordinateur est en panne ? Nous le réparons.',puce:'Av. Cikapa, Q/Ciaciacia n° 18, Kanshi',img:'photos/accueil-3.jpg',bt:{l:'Appeler maintenant',tel:'+243860269169'}},
+{ico:'💬',tag:'Communauté',titre:'Échangez, publiez, restez informé.',texte:'Fil d’actualité, discussion, alertes et assistant.',img:'photos/accueil-4.jpg',bt:{l:'Rejoindre la discussion',go:'chat'}}];
+const HOLD=6500,OUT=700,box=document.getElementById('sc'),dts=document.getElementById('sd');if(!box)return;
+SCENES.forEach(s=>{const d=document.createElement('div');let i=0;d.className='sl';
+let h=`<div class="vis el" style="--i:${i++}"><span>${s.ico}</span><img src="${s.img}" alt="" onerror="this.remove()"></div>`;
+h+=`<div class="tx2"><span class="tg el" style="--i:${i++}">${s.tag}</span><h2 class="el" style="--i:${i++}">${s.titre}</h2>`;
+if(s.texte)h+=`<p class="el" style="--i:${i++}">${s.texte}</p>`;if(s.puce)h+=`<span class="ch el" style="--i:${i++}">${s.puce}</span>`;
+if(s.bt)h+=s.bt.tel?`<a class="bt el" style="--i:${i++}" href="tel:${s.bt.tel}">${s.bt.l}</a>`:`<a class="bt el" style="--i:${i++}" href="#" data-go="${s.bt.go}">${s.bt.l}</a>`;
+d.innerHTML=h+'</div>';box.appendChild(d);dts.appendChild(document.createElement('i'))});
+const sl=[...box.children],pt=[...dts.children];let t;
+function play(n){sl.forEach((x,k)=>{x.classList.remove('on','out');pt[k].classList.remove('on')});void sl[n].offsetWidth;sl[n].classList.add('on');pt[n].classList.add('on');
+t=setTimeout(()=>{sl[n].classList.add('out');t=setTimeout(()=>play((n+1)%sl.length),OUT)},HOLD)}
+pt.forEach((p,k)=>p.onclick=()=>{clearTimeout(t);play(k)});play(0);
+let WANT=null,viaScene=false;const go=document.getElementById('go');
+go.addEventListener('click',()=>{if(!viaScene)WANT=null});
+box.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();WANT=a.dataset.go;viaScene=true;go.click();viaScene=false});
+auth.onAuthStateChanged(u=>{if(u&&WANT){const w=WANT;WANT=null;show(w)}})})();
 </script></body></html>
