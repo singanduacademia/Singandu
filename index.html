@@ -37,41 +37,39 @@ dialog{border:0;border-radius:20px;padding:22px;width:min(92vw,520px);background
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.sh{position:absolute;background:#fff;opacity:.11;pointer-events:none}
-.s1{width:min(46vw,380px);aspect-ratio:1;border-radius:50%;right:-12%;top:-14%}
-.s2{width:min(28vw,220px);aspect-ratio:1;border-radius:50%;left:-8%;bottom:6%}
-.s3{width:44px;height:44px;clip-path:polygon(0 0,100% 50%,0 100%);right:10%;bottom:14%;opacity:.45;animation:fl 4s ease-in-out infinite}
+.hdb{margin-left:auto;background:#1c2cb0;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:.9rem;cursor:pointer}.hdb[hidden]{display:none}.lg{display:none}@media(min-width:600px){.lg{display:inline}}
+.hero{display:block;min-height:0;padding:0 0 30px;text-align:left;background:linear-gradient(165deg,#07106b,#0a1470 45%,#1c2cb0);animation:none}
+.sh{position:absolute;background:#fff;opacity:.09;pointer-events:none}
+.s1{width:min(46vw,380px);aspect-ratio:1;border-radius:50%;right:-12%;top:-8%}
+.s2{width:min(28vw,220px);aspect-ratio:1;border-radius:50%;left:-8%;bottom:4%}
+.s3{width:44px;height:44px;clip-path:polygon(0 0,100% 50%,0 100%);right:8%;bottom:10%;opacity:.4;animation:fl 4s ease-in-out infinite}
 @keyframes fl{50%{transform:translateY(-14px) rotate(8deg)}}
-.hw{width:100%;max-width:1040px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:clamp(22px,4vh,38px)}
-.sc{position:relative;width:100%;min-height:480px}
-.sl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;visibility:hidden}
-.sl.on{visibility:visible}
+.hw{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 5vw}
+.sc{position:relative;min-height:clamp(580px,calc(34vh + 380px),720px)}
+.sl{position:absolute;inset:0;display:flex;flex-direction:column;gap:24px;padding-top:20px;visibility:hidden}
+.sl.on{visibility:visible}.sl.out{pointer-events:none}
 .sl .el{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
 .sl.on .el{opacity:1;transform:none;transition-delay:calc(var(--i)*.7s)}
 .sl.out .el{opacity:0;transform:translateX(-40px);transition:opacity .45s ease,transform .45s ease;transition-delay:calc(var(--i)*.06s)}
-.tx2{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:30rem}
-.sl h2{margin:0;font-size:clamp(1.7rem,5.4vw,2.9rem);line-height:1.15;font-weight:800}
-.sl p{margin:0;font-size:1.08rem;max-width:26em}
-.sl .tg{background:#fff;color:var(--navy);font-weight:700;font-size:.85rem;padding:6px 16px;border-radius:999px}
-.sl .ch{border:2px solid #fff;padding:9px 20px;border-radius:14px;font-weight:600}
-.vis{position:relative;width:150px;height:150px;border-radius:34px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.55);display:grid;place-items:center;font-size:3.6rem;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.28)}
-.vis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-@media(min-width:860px){
-.sc{min-height:380px}
-.sl{flex-direction:row;justify-content:space-between;gap:72px;padding:0 28px}
-.tx2{align-items:flex-start;text-align:left;max-width:none;flex:1.15}
-.sl p{max-width:24em}
-.vis{order:2;flex:.85;width:auto;max-width:340px;height:auto;aspect-ratio:1;font-size:6rem;border-radius:44px}}
-.cta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;width:100%}
-.cta button{flex:1 1 220px;max-width:340px;margin:0}
-.wb{background:transparent;color:#fff;border:2px solid #fff;padding:15px 26px;font-size:1rem}
-.hw .msg{margin:0;text-align:center}
-.dts{display:flex;gap:8px;justify-content:center}.dts i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:.3s}.dts i.on{width:26px;border-radius:6px;background:#fff}
+.ph{display:block;width:100%;height:clamp(200px,34vh,340px);object-fit:cover;border-radius:28px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.tx2{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.sl h2{margin:0;color:#fff;font-size:clamp(1.9rem,6vw,3.1rem);line-height:1.12;font-weight:800}
+.sl p{margin:0;max-width:30em;font-size:1.05rem;opacity:.92}
+.sl .tg{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.45);color:#fff;font-weight:600;font-size:.85rem;padding:6px 16px;border-radius:999px}
+.sl .bt{display:inline-flex;align-items:center;gap:10px;background:#2f6df6;color:#fff;font-weight:700;text-decoration:none;padding:14px 26px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.25);cursor:pointer}
+.cta{margin-top:4px}
+.gbtn{display:inline-flex;align-items:center;gap:12px;background:#fff;color:#14206e;font-weight:700;font-size:1rem;padding:14px 24px;border:0;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.25);cursor:pointer}
+.hw .msg{margin:12px 0 0;color:#fff}
+.dts{display:flex;gap:8px;margin-top:22px}.dts i{width:34px;height:4px;border-radius:3px;background:rgba(255,255,255,.35);cursor:pointer;transition:.3s}.dts i.on{background:#fff}
+@media(min-width:900px){
+.sc{min-height:470px}
+.sl{flex-direction:row;align-items:center;gap:64px;padding-top:0}
+.tx2{flex:1.1}
+.ph{order:2;flex:.9;width:auto;min-width:0;max-width:440px;height:400px;border-radius:44px}}
 @media(prefers-reduced-motion:reduce){.sl .el,.sl.on .el{transition:none;transform:none}.s3{animation:none}}
-.sl .bt{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--navy);font-weight:800;text-decoration:none;padding:14px 24px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.22);cursor:pointer}.sl .bt::after{content:"";border-left:11px solid var(--blue);border-top:7px solid transparent;border-bottom:7px solid transparent}.sl.out{pointer-events:none}
 </style></head><body>
-<div id="land"><header class="hd"><img src="logo.jpg" alt=""><b>Singandu Academia</b></header>
-<section class="hero"><i class="bb" style="left:6%;--d:11s;width:30px;height:30px"></i><i class="bb" style="left:22%;--d:15s;width:18px;height:18px"></i><i class="bb" style="left:40%;--d:12s;width:44px;height:44px"></i><i class="bb" style="left:58%;--d:17s;width:24px;height:24px"></i><i class="bb" style="left:74%;--d:10s;width:36px;height:36px"></i><i class="bb" style="left:90%;--d:14s;width:20px;height:20px"></i><i class="sh s1"></i><i class="sh s2"></i><i class="sh s3"></i><div class="hw"><h1 class="sr">Apprendre, c’est conquérir l’invisible.</h1><div id="sc" class="sc"></div><div class="cta"><button id="go" class="yb">Connectez-vous pour continuer</button><button id="bInst2" class="wb">📲 Télécharger l’application</button></div><p id="ge" class="msg"></p><div class="dts" id="sd"></div></div></section>
+<div id="land"><header class="hd"><img src="logo.jpg" alt=""><b>Singandu Academia</b><button id="bInst2" class="hdb">Télécharger<span class="lg"> l’application</span></button></header>
+<section class="hero"><i class="bb" style="left:6%;--d:11s;width:30px;height:30px"></i><i class="bb" style="left:22%;--d:15s;width:18px;height:18px"></i><i class="bb" style="left:40%;--d:12s;width:44px;height:44px"></i><i class="bb" style="left:58%;--d:17s;width:24px;height:24px"></i><i class="bb" style="left:74%;--d:10s;width:36px;height:36px"></i><i class="bb" style="left:90%;--d:14s;width:20px;height:20px"></i><i class="sh s1"></i><i class="sh s2"></i><i class="sh s3"></i><div class="hw"><h1 class="sr">Singandu Academia : réparation d’ordinateurs, formation en informatique et accompagnement académique à Mbuji-Mayi.</h1><div id="sc" class="sc"></div><div class="cta"><button id="go" class="gbtn"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Se connecter avec Google</button></div><p id="ge" class="msg"></p><div class="dts" id="sd"></div></div></section>
 <section class="stage"><canvas id="cv"></canvas></section>
 <footer><a href="https://www.facebook.com/share/1HuJEdoZg4/">Facebook</a><a href="https://www.youtube.com/@SingAcad">YouTube</a><a href="https://g.page/r/CdM76RwNaCdYEBI/review">Avis Google</a><br><a href="#" data-info="conf">Confidentialité</a><a href="#" data-info="reg">Règlement</a><a href="#" data-info="cgu">Conditions</a><br>© Singandu Academia</footer></div>
 <div id="app" hidden><header class="hd ah"><img src="logo.jpg" alt=""><div><b>Singandu Academia</b><small id="ttl">Accueil</small></div><span id="av"></span></header><div class="wrap">
@@ -312,19 +310,21 @@ requestAnimationFrame(f);window.demoCard=card;
 // ---- accueil animé ----
 (function(){
 const SCENES=[
-{ico:'🎓',tag:'Singandu Academia',titre:'Apprendre, c’est conquérir l’invisible.',texte:'Formations informatiques à Mbuji-Mayi (RDC).',img:'photos/accueil-1.jpg',bt:{l:'S’inscrire',go:'form'}},
-{ico:'💻',tag:'Formations',titre:'En ligne, à domicile ou au centre.',puce:'Tous les niveaux, du débutant au confirmé',img:'photos/accueil-2.jpg',bt:{l:'Voir les formations',go:'form'}},
-{ico:'🛠️',tag:'Dépannage',titre:'Votre ordinateur est en panne ? Nous le réparons.',puce:'Av. Cikapa, Q/Ciaciacia n° 18, Kanshi',img:'photos/accueil-3.jpg',bt:{l:'Appeler maintenant',tel:'+243860269169'}},
-{ico:'💬',tag:'Communauté',titre:'Échangez, publiez, restez informé.',texte:'Fil d’actualité, discussion, alertes et assistant.',img:'photos/accueil-4.jpg',bt:{l:'Rejoindre la discussion',go:'chat'}}];
+{tag:'Nos services',titre:'Réparation d’ordinateurs',texte:'Maintenance informatique et accompagnement de vos projets informatiques.',bt:{l:'Appeler maintenant',tel:'+243860269169'}},
+{tag:'Formation',titre:'Formation complète en informatique',texte:'À domicile, en ligne ou en présentiel.',bt:{l:'Voir les formations',go:'form'}},
+{tag:'Académique',titre:'Mémoires et travaux académiques',texte:'Un accompagnement pour réaliser vos mémoires et vos travaux informatiques.',bt:{l:'Nous contacter',tel:'+243860269169'}},
+{tag:'Étudiants',titre:'Étudiants et finalistes',texte:'Nous accompagnons aussi les nouveaux étudiants et les finalistes.',bt:{l:'S’inscrire',go:'form'}}];
 const HOLD=6500,OUT=700,box=document.getElementById('sc'),dts=document.getElementById('sd');if(!box)return;
-SCENES.forEach(s=>{const d=document.createElement('div');let i=0;d.className='sl';
-let h=`<div class="vis el" style="--i:${i++}"><span>${s.ico}</span><img src="${s.img}" alt="" onerror="this.remove()"></div>`;
-h+=`<div class="tx2"><span class="tg el" style="--i:${i++}">${s.tag}</span><h2 class="el" style="--i:${i++}">${s.titre}</h2>`;
-if(s.texte)h+=`<p class="el" style="--i:${i++}">${s.texte}</p>`;if(s.puce)h+=`<span class="ch el" style="--i:${i++}">${s.puce}</span>`;
-if(s.bt)h+=s.bt.tel?`<a class="bt el" style="--i:${i++}" href="tel:${s.bt.tel}">${s.bt.l}</a>`:`<a class="bt el" style="--i:${i++}" href="#" data-go="${s.bt.go}">${s.bt.l}</a>`;
+const ok=[];let last='';
+for(let k=1;k<=12;k++){const u='photos/accueil-'+k+'.jpg',im=new Image();im.onload=()=>ok.push(u);im.src=u}
+const pick=()=>{const a=ok.length?ok:['teach.jpg'],b=a.filter(u=>u!==last),c=b.length?b:a;last=c[Math.floor(Math.random()*c.length)];return last};
+SCENES.forEach(s=>{const d=document.createElement('div');let i=1;d.className='sl';
+let h='<img class="ph el" style="--i:0" alt="" src="teach.jpg"><div class="tx2">';
+h+=`<span class="tg el" style="--i:${i++}">${s.tag}</span><h2 class="el" style="--i:${i++}">${s.titre}</h2><p class="el" style="--i:${i++}">${s.texte}</p>`;
+h+=s.bt.tel?`<a class="bt el" style="--i:${i++}" href="tel:${s.bt.tel}">${s.bt.l}</a>`:`<a class="bt el" style="--i:${i++}" href="#" data-go="${s.bt.go}">${s.bt.l}</a>`;
 d.innerHTML=h+'</div>';box.appendChild(d);dts.appendChild(document.createElement('i'))});
 const sl=[...box.children],pt=[...dts.children];let t;
-function play(n){sl.forEach((x,k)=>{x.classList.remove('on','out');pt[k].classList.remove('on')});void sl[n].offsetWidth;sl[n].classList.add('on');pt[n].classList.add('on');
+function play(n){sl.forEach((x,k)=>{x.classList.remove('on','out');pt[k].classList.remove('on')});sl[n].querySelector('.ph').src=pick();void sl[n].offsetWidth;sl[n].classList.add('on');pt[n].classList.add('on');
 t=setTimeout(()=>{sl[n].classList.add('out');t=setTimeout(()=>play((n+1)%sl.length),OUT)},HOLD)}
 pt.forEach((p,k)=>p.onclick=()=>{clearTimeout(t);play(k)});play(0);
 let WANT=null,viaScene=false;const go=document.getElementById('go');
