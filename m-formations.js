@@ -1,0 +1,7 @@
+// m-formations.js
+F.forEach(f=>$('#fs').add(new Option(f[0])));$('#fs').onchange=showF;
+function showF(){const f=F.find(x=>x[0]===$('#fs').value);if(!f){$('#fd').innerHTML='<p class="mu">Choisissez une formation : son tarif et ses conditions s’affichent ici.</p>';return}
+$('#fd').innerHTML=`<h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><p class="price">${f[2]} $</p><p>Inscription : 5 $, non remboursable. Paiement en deux tranches, la seconde 15 jours après le début.<br>M-Pesa 0860269169 · Orange Money 0852780788 · espèces au centre · banque sur demande.</p><div class="modes" style="margin-top:12px"><button id="bSol">Envoyer ma demande</button><button id="bFi" class="ghost">Télécharger ma fiche</button></div><p class="mu" id="mf"></p>`;
+$('#bFi').onclick=()=>fiche(f);$('#bSol').onclick=async()=>{try{await db.collection('demandes').add({uid:me.uid,nom:user,email:me.email,type:'formation',formation:f[0],prix:f[2],statut:'en attente',cree:TS()});wait($('#mf'),'Demande envoyée. L’administrateur va l’examiner et vous répondra dans vos alertes.');loadMine()}catch(e){wait($('#mf'),'Envoi impossible. Réessayez.')}}}
+showF();
+$('#bDp').onclick=async()=>{const n=$('#dp').value.trim();if(!n)return wait($('#md'),'Décrivez la panne.');try{await db.collection('demandes').add({uid:me.uid,nom:user,email:me.email,type:'dépannage',formation:'Dépannage',note:n.slice(0,500),tel:$('#dt').value.slice(0,30),statut:'en attente',cree:TS()});$('#dp').value='';wait($('#md'),'Demande envoyée.');loadMine()}catch(e){wait($('#md'),'Envoi impossible.')}};
