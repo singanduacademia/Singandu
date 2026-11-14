@@ -1,0 +1,109 @@
+/* ===== accueil.css : nouvel accueil Singandu Academia (chargé après app.css) ===== */
+
+/* ---- Fenêtre de connexion plein écran ---- */
+.lp{display:block;padding-bottom:104px}
+.win{position:relative;overflow:hidden;display:flex;flex-direction:column;
+  min-height:calc(100vh - 72px);min-height:calc(100svh - 72px);
+  color:#fff;background:linear-gradient(165deg,#07106b,#0b1f6b 45%,#1f4fd8);
+  background-size:140% 140%;animation:wbg 16s ease-in-out infinite alternate}
+@keyframes wbg{to{background-position:100% 100%}}
+.win>.bb{z-index:1}
+.wtop{position:relative;z-index:2;padding:18px 6vw 20px;text-align:center}
+.wart{display:block;width:min(70vw,290px);height:auto;margin:0 auto 10px;overflow:visible}
+.wtop h2{margin:0 0 6px;font-size:clamp(1.45rem,6vw,2.3rem);font-weight:800;line-height:1.18;color:#fff}
+.wtop p{margin:0 auto;max-width:28em;opacity:.9;font-size:.98rem}
+
+.win .lauth{position:relative;z-index:2;margin-top:auto;background:var(--card);color:var(--ink);
+  border-radius:30px 30px 0 0;padding:26px 22px 44px;box-shadow:0 -14px 40px rgba(0,0,0,.28);
+  animation:sheet .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes sheet{from{transform:translateY(60px);opacity:0}}
+.lauth .lh2{margin:0 0 4px;font-size:1.55rem;font-weight:800;color:var(--ink)}
+.lauth .lsub{margin:0 0 18px;color:var(--muted);font-size:.95rem}
+.lauth label{display:block;font-weight:600;font-size:.9rem;color:var(--ink)}
+.lauth input{background:var(--sky);border-color:transparent}
+.lauth input:focus{outline:2px solid var(--blue);background:var(--card)}
+.lauth .msg{color:#c0211d;margin:10px 0 0;min-height:1.2em;font-size:.9rem}
+.lauth .sm{font-size:.85rem;margin-top:12px;text-align:center}
+.lauth .sm a{color:var(--blue);font-weight:600}
+
+.gbtn.wide,button.wide{display:flex;width:100%;justify-content:center;align-items:center;gap:12px;padding:15px 20px;font-size:1rem}
+.lauth .gbtn{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 6px 18px rgba(11,31,107,.12);transition:transform .2s,box-shadow .2s}
+.lauth .gbtn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(11,31,107,.18)}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.85rem;margin:18px 0 14px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.pw{display:flex;align-items:center;gap:8px;margin:6px 0 14px}
+.pw input{flex:1;min-width:0;margin:0}
+.eye{flex:none;background:var(--sky);color:var(--ink);padding:12px 16px;border-radius:12px;font-size:.85rem;font-weight:600}
+.lauth label>input{margin-bottom:14px}
+
+@media(min-width:900px){
+  .win{display:grid;grid-template-columns:1fr minmax(380px,450px);align-items:center;gap:6vw;padding:40px 8vw}
+  .wtop{text-align:left;padding:0}
+  .wart{margin:0 0 18px;width:min(36vw,380px)}
+  .wtop p{margin:0}
+  .win .lauth{margin:0;border-radius:30px;padding:30px 28px}
+}
+
+/* ---- Illustration animée ---- */
+.cap{animation:capf 3.2s ease-in-out infinite}
+@keyframes capf{50%{transform:translateY(-9px) rotate(-3deg)}}
+.cap,.ln,.cur,.stz{transform-box:fill-box}
+.cap{transform-origin:center}
+.ln{transform-origin:left center;animation:typ 3.6s ease-in-out infinite alternate}
+.ln.l2{animation-delay:.5s}.ln.l3{animation-delay:1s}.ln.l4{animation-delay:1.5s}
+@keyframes typ{from{transform:scaleX(.25);opacity:.5}to{transform:scaleX(1);opacity:1}}
+.cur{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.stz{transform-origin:center;animation:tw 2.4s ease-in-out infinite}
+.stz.s2{animation-delay:.8s}.stz.s3{animation-delay:1.6s}
+@keyframes tw{50%{transform:scale(.4) rotate(40deg);opacity:.5}}
+
+/* ---- Barre du bas de l'accueil ---- */
+#lnav{position:fixed;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;justify-content:space-around;
+  background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 8px 30px rgba(11,31,107,.2);padding:6px 4px}
+#lnav button{background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.68rem;padding:6px 12px;border-radius:14px;transition:background .2s,color .2s}
+#lnav button.on{background:var(--grad);color:#fff}
+#lnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media(min-width:900px){#lnav{left:50%;right:auto;transform:translateX(-50%);width:min(480px,90vw)}}
+
+/* ---- Sections ---- */
+.lsec{padding-top:48px}
+.sv{transition:transform .25s,box-shadow .25s}
+.sv:hover{transform:translateY(-5px);box-shadow:0 14px 36px rgba(11,31,107,.16)}
+.sv .si{transition:transform .3s}.sv:hover .si{transform:rotate(-6deg) scale(1.08)}
+
+/* ---- Bannière « Besoin d'aide ? » ---- */
+.help{display:flex;align-items:center;gap:14px;width:min(1100px,90vw);margin:34px auto 0;
+  background:linear-gradient(135deg,#0b1f6b,#1f4fd8);color:#fff;text-decoration:none;
+  border-radius:24px;padding:18px 20px;box-shadow:0 12px 30px rgba(11,31,107,.25);transition:transform .25s}
+.help:hover{transform:translateY(-3px)}
+.help .hi{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.16)}
+.help .hi svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.help>div{flex:1;min-width:0}
+.help b{display:block;font-size:1.05rem}
+.help small{display:block;opacity:.88}
+.help .ch{flex:none;width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---- À propos ---- */
+.quo{font-style:italic;font-weight:700;color:var(--blue);margin:12px 0}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pills span{background:var(--sky);color:var(--ink);font-weight:600;font-size:.88rem;padding:8px 16px;border-radius:999px}
+
+/* ---- Ancien hero retiré ---- */
+.hc,.hcs,.hdots{display:none!important}
+
+/* ---- Sécurité : aucune icône sans taille ne devient géante ---- */
+:where(#land svg:not([width]):not([class])){width:24px;height:24px}
+
+/* ---- Contact : texte lisible (le span n'est plus une icône) ---- */
+.cts a{flex-direction:column;align-items:flex-start;gap:2px}
+.cts a span{display:block;width:auto;height:auto;background:none;border-radius:0;color:var(--muted);overflow-wrap:anywhere}
+
+/* ---- Téléphone : la carte de connexion remonte pour que le bouton Google reste visible ---- */
+@media(max-width:899px){
+  .wart{width:min(44vw,175px);margin-bottom:6px}
+  .wtop{padding:10px 6vw 16px}
+  .wtop h2{font-size:1.4rem}
+  .wtop p{font-size:.9rem}
+  .win .lauth{flex:1;margin-top:0;padding-top:22px}
+}
