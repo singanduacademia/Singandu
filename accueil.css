@@ -107,3 +107,41 @@
   .wtop p{font-size:.9rem}
   .win .lauth{flex:1;margin-top:0;padding-top:22px}
 }
+
+/* ===== Discussion style WhatsApp ===== */
+[data-p="chat"]>.seg{display:none}
+.av.bot{background:linear-gradient(135deg,#6a4cff,#1f4fd8)}
+.dmrow .rt{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
+.dmrow .tm{font-size:.7rem;color:var(--muted)}
+
+.wa{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;background:var(--bg)}
+.wa[hidden]{display:none}
+.wah{flex:none;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;background:var(--grad);color:#fff;box-shadow:0 2px 14px rgba(0,0,0,.22)}
+.wah .bk{flex:none;display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:10px 16px 10px 10px;font-weight:700;border:0}
+.wah .bk svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.wap{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.wap>div{min-width:0}
+.wap b{display:block;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wap small{display:block;color:rgba(255,255,255,.88)}
+.wap .dot{border-color:#1f4fd8}
+#dmM.wam{flex:1;max-height:none;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  width:100%;max-width:760px;margin:0 auto;padding:14px 12px 10px;display:flex;flex-direction:column;gap:7px}
+.wd{align-self:center;background:var(--card);color:var(--muted);font-size:.75rem;padding:4px 14px;border-radius:999px;margin:8px 0 2px;box-shadow:0 1px 2px rgba(11,31,107,.1)}
+.wr{display:flex;align-items:flex-end;gap:8px;max-width:88%}
+.wr.me{align-self:flex-end;flex-direction:row-reverse}
+.wr .av{width:32px;height:32px;font-size:.8rem;cursor:default}
+.wb{padding:9px 13px 6px;border-radius:18px;line-height:1.4;overflow-wrap:anywhere;white-space:pre-wrap;box-shadow:0 1px 2px rgba(11,31,107,.14)}
+.wr:not(.me) .wb{background:var(--card);color:var(--ink);border-bottom-left-radius:5px}
+.wr.me .wb{background:linear-gradient(135deg,#2f6df6,#1a3fb8);color:#fff;border-bottom-right-radius:5px}
+.wb time{display:block;text-align:right;font-size:.68rem;opacity:.72;margin-top:2px}
+.waj{position:absolute;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:2;min-width:46px;height:46px;padding:0 14px;border-radius:999px;
+  background:var(--card);color:var(--blue);border:1px solid var(--line);box-shadow:0 6px 18px rgba(11,31,107,.25);font-size:1.15rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
+.waj span{font-size:.8rem}
+.waf{flex:none;display:flex;gap:8px;align-items:center;padding:8px max(10px,calc((100% - 760px)/2)) calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line)}
+.waf input{flex:1;min-width:0;margin:0;border:0;border-radius:999px;background:var(--sky);padding:13px 18px;font-size:1rem}
+.waf button{flex:none;width:46px;height:46px;border-radius:50%;padding:0;display:grid;place-items:center}
+.waf button svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* La discussion doit pouvoir couvrir tout l'écran : pas de transformation sur son panneau */
+.pane[data-p="chat"],.pane[data-p="chat"].on{animation:none!important;transform:none!important;filter:none!important;will-change:auto}
+.waf input:focus{outline:none;box-shadow:0 0 0 2px var(--blue)}
