@@ -209,3 +209,32 @@
 .fin .bg{font-size:3.4rem;font-weight:800;color:var(--blue)}
 .ins summary{cursor:pointer;font-weight:700;color:var(--ink)}
 .ins .sub{margin-top:16px}
+
+/* ===== Messagerie : clavier, défilement, "écrit…", bandeau de message ===== */
+.wa{inset:auto;top:0;left:0;right:0;height:100vh;height:100dvh;overflow:hidden}
+#dmM.wam{min-height:0;touch-action:pan-y}
+.wap small.typing{font-style:italic}
+.wb.dots{display:flex;gap:5px;align-items:center;padding:13px 16px}
+.wb.dots i{width:8px;height:8px;border-radius:50%;background:var(--muted);animation:tdot 1.1s infinite ease-in-out}
+.wb.dots i:nth-child(2){animation-delay:.18s}.wb.dots i:nth-child(3){animation-delay:.36s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-5px);opacity:1}}
+.ntc{border-left:5px solid var(--blue)}
+.ntc p{margin:6px 0 12px}
+.toast{position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:95;display:flex;flex-direction:column;gap:2px;
+  background:var(--card);color:var(--ink);border-left:5px solid var(--blue);border-radius:16px;padding:12px 16px;box-shadow:0 12px 34px rgba(11,31,107,.3);animation:in .3s both}
+.toast[hidden]{display:none}
+.toast span{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ===== Installation de l'application ===== */
+#ibar{position:fixed;left:10px;right:10px;top:calc(8px + env(safe-area-inset-top,0px));z-index:90;display:flex;align-items:center;gap:12px;
+  background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:10px 12px;box-shadow:0 12px 34px rgba(11,31,107,.28);animation:in .4s both}
+#ibar img{width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none}
+#ibar div{flex:1;min-width:0}
+#ibar b{display:block;font-size:.95rem}
+#ibar small{display:block;color:var(--muted);font-size:.78rem}
+#ibar button{flex:none;padding:10px 16px;font-size:.9rem}
+#ibar #ibN{padding:10px 12px}
+.ihelp{position:fixed;inset:0;z-index:99;display:grid;place-items:end center;background:rgba(5,10,40,.55)}
+.ihelp .ih{width:min(520px,100%);background:var(--card);color:var(--ink);border-radius:26px 26px 0 0;padding:22px 22px calc(22px + env(safe-area-inset-bottom,0px))}
+.ihelp ol{padding-left:22px;line-height:1.7}
+.ihelp button{width:100%;padding:14px;margin-top:10px}
