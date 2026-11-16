@@ -48,7 +48,7 @@ const cl=Object.keys(conv).sort((x,y)=>ts(conv[y][conv[y].length-1])-ts(conv[x][
 const nt='Notification' in window&&Notification.permission==='default';
 $('#dmB').innerHTML=
 (nt?`<div class="card ntc"><b>Soyez prévenu de chaque message</b><p class="mu">Activez les notifications pour recevoir une alerte quand quelqu’un vous écrit.</p><button type="button" data-notif="1">Activer les notifications</button></div>`:'')+
-`<div class="card"><h3>En ligne</h3><div class="ons"><div class="on1" data-bot="1">${botAv}<span>Singala</span></div>${onl.map(i=>`<div class="on1" data-o="${i}">${avh(i)}<span>${esc((PRO[i].nom||'').split(' ')[0])}</span></div>`).join('')}</div>${onl.length?'':'<p class="mu">Aucun ami en ligne pour le moment. Singala est toujours là pour vous aider.</p>'}</div>`+
+`<div class="card"><h3>En ligne</h3><div class="ons"><div class="on1" data-bot="1">${botAv}<span>Sibot</span></div>${onl.map(i=>`<div class="on1" data-o="${i}">${avh(i)}<span>${esc((PRO[i].nom||'').split(' ')[0])}</span></div>`).join('')}</div>${onl.length?'':'<p class="mu">Aucun ami en ligne pour le moment. Sibot est toujours là pour vous aider.</p>'}</div>`+
 `<div class="card"><h3>Conversations</h3>${cl.length?cl.map(i=>{const l=conv[i][conv[i].length-1],n=conv[i].filter(m=>m.a===me.uid&&!m.lu).length;return `<div class="dmrow" data-o="${i}">${avh(i)}<div class="nm"><b>${esc((PRO[i]&&PRO[i].nom)||l.nom||'Inscrit')}</b><small>${isTyp(i)?'écrit…':(l.de===me.uid?'Vous : ':'')+esc(l.t)}</small></div><div class="rt"><span class="tm">${hm(ts(l))}</span>${n?`<span class="cn">${n}</span>`:''}</div></div>`}).join(''):'<p class="mu">Touchez un ami en ligne pour démarrer une discussion.</p>'}</div>`}
 
 /* ---- Conversation ---- */
