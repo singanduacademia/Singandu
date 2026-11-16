@@ -334,4 +334,4 @@
 .mm{display:inline-flex;align-items:center;gap:4px;padding:1px 9px;border-radius:8px;font-weight:800;font-size:.85em;line-height:1.55;vertical-align:baseline;color:#fff}
 .mm.mp{background:#16a34a}.mm.om{background:#ff7900}
 .mm img{height:1.4em;width:auto;border-radius:4px}
-.mm.lg{padding:0;background:none}.mm.lg b{display:none}
+.mm.lg{padding:0 10px 0 0;background:var(--sky);color:var(--ink);gap:6px;overflow:hidden}.mm.lg img{height:1.7em;border-radius:8px 0 0 8px}
