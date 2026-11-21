@@ -1,10 +1,10 @@
 {
-  "id": "./",
+  "id": "app.html",
   "name": "Singandu Academia",
   "short_name": "Singandu",
   "description": "Apprendre, c’est conquérir l’invisible.",
   "lang": "fr",
-  "start_url": "./",
+  "start_url": "app.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
