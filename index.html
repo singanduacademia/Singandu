@@ -274,7 +274,7 @@ const VIDEO={id:'',titre:'Découvre Singandu Academia'};
 /* ============================================================ */
 
 /* Si l'application est installée sur le téléphone, on l'ouvre directement */
-try{if(matchMedia('(display-mode: standalone)').matches)location.replace(APP_URL)}catch(e){}
+try{if(matchMedia('(display-mode: standalone)').matches&&!/[?&]site=1/.test(location.search))location.replace(APP_URL)}catch(e){}
 
 const FORMATIONS=[['Initiation à l’informatique','Niveau léger : faisable même avec un téléphone ou peu de matériel.',100],['Bureautique','Niveau ordinateur : un ordinateur est nécessaire.',150],['Maintenance','Niveau ordinateur : pratique sur ordinateur.',150],['Réseaux','Niveau ordinateur : pratique sur ordinateur.',150],['Développement web','Niveau léger : les bases se pratiquent même sur téléphone.',100],['Applications de bureau','Niveau complexe : formation longue avec accompagnement renforcé.',250],['Bases de données','Niveau complexe : formation longue avec accompagnement renforcé.',250]];
 const wa=t=>'https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(t);
