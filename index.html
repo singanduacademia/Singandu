@@ -374,13 +374,13 @@ function ouvrir(q){sp.classList.add('on');if(q)envoyer(q);else setTimeout(()=>si
 $('#sbb').onclick=()=>ouvrir();
 $('#sbx').onclick=()=>sp.classList.remove('on');
 function add(c,t){const d=document.createElement('div');d.className='m '+c;d.textContent=t;sm.appendChild(d);d.scrollIntoView({block:'end'});return d}
-function repli(q){const d=add('b','');d.innerHTML='Sibot se repose un instant. Écris-nous sur WhatsApp : <a target="_blank" rel="noopener" href="'+wa(q||'Bonjour, j’ai une question sur Singandu Academia.')+'">+243 860 269 169</a>'}
+function repli(q,x){const d=add('b','');d.innerHTML='Sibot se repose un instant. Écris-nous sur WhatsApp : <a target="_blank" rel="noopener" href="'+wa(q||'Bonjour, j’ai une question sur Singandu Academia.')+'">+243 860 269 169</a>';if(x&&/[?&]debug=1/.test(location.search)){const t=document.createElement('div');t.className='m b';t.style.fontSize='.8rem';t.style.color='#b42318';t.textContent='Détail technique : '+(x.code?x.code+' · ':'')+(x.message||x);sm.appendChild(t);t.scrollIntoView({block:'end'})}}
 async function init(){const app=await fb(),B=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-ai.js');
 const ai=B.getAI(app,{backend:new B.GoogleAIBackend()});
 chat=B.getGenerativeModel(ai,{model:MODELE,systemInstruction:CONSIGNES}).startChat()}
 async function envoyer(q){if(nb>=20){add('b','Pour aujourd’hui, on a beaucoup discuté ! Écris-nous sur WhatsApp pour la suite.');return}
 nb++;add('u',q);const w=add('b','…');
-try{if(!chat)await init();const r=await chat.sendMessage(q);w.textContent=r.response.text()}catch(x){w.remove();repli(q)}}
+try{if(!chat)await init();const r=await chat.sendMessage(q);w.textContent=r.response.text()}catch(x){w.remove();repli(q,x)}}
 $('#sf').onsubmit=e=>{e.preventDefault();const q=si.value.trim();if(!q)return;si.value='';envoyer(q)};
 </script>
 </body>
