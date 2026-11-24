@@ -5,7 +5,7 @@
   "description": "Apprendre, c’est conquérir l’invisible.",
   "lang": "fr",
   "start_url": "app.html",
-  "scope": "./",
+  "scope": "app.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a1470",
