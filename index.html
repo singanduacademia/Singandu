@@ -107,6 +107,7 @@ section.ph>.wrap{position:relative;z-index:1}
 /* Formations : défilement horizontal */
 .car{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 18px;margin:0 -20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .car::-webkit-scrollbar{display:none}
+.si{width:100%;height:130px;object-fit:cover;border-radius:14px;margin-bottom:12px;display:block}
 .fc{position:relative;flex:0 0 min(78vw,320px);height:440px;border-radius:24px;overflow:hidden;scroll-snap-align:center;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;border:1px solid rgba(255,255,255,.28);background:#0b1f6b;opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease}
 .car.on .fc{opacity:1;transform:none}
 .fc::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,16,107,.05) 25%,rgba(7,16,107,.75) 100%)}
@@ -279,11 +280,11 @@ try{if(matchMedia('(display-mode: standalone)').matches&&!/[?&]site=1/.test(loca
 const FORMATIONS=[['Initiation à l’informatique','Niveau léger : faisable même avec un téléphone ou peu de matériel.',100],['Bureautique','Niveau ordinateur : un ordinateur est nécessaire.',150],['Maintenance','Niveau ordinateur : pratique sur ordinateur.',150],['Réseaux','Niveau ordinateur : pratique sur ordinateur.',150],['Développement web','Niveau léger : les bases se pratiquent même sur téléphone.',100],['Applications de bureau','Niveau complexe : formation longue avec accompagnement renforcé.',250],['Bases de données','Niveau complexe : formation longue avec accompagnement renforcé.',250]];
 const wa=t=>'https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(t);
 const SERVICES=[
- ['book','Rédaction de mémoires','Un accompagnement personnalisé pour réaliser tes mémoires et tes travaux.',wa('Bonjour, je souhaite un accompagnement pour mon mémoire.'),'Demander'],
- ['laptop','Travaux informatiques','Développement et réalisation de projets informatiques.',wa('Bonjour, j’ai un projet informatique à vous confier.'),'Demander'],
- ['check','Correction et mise en forme','Correction, mise en forme et structuration de tes documents.',wa('Bonjour, je voudrais faire corriger et mettre en forme un document.'),'Demander'],
- ['tool','Dépannage d’ordinateurs','Diagnostic et réparation de ton ordinateur, matériel ou logiciel.',wa('Bonjour, mon ordinateur a un problème : pouvez-vous m’aider ?'),'Demander une réparation'],
- ['web','Création de site web','Commande un site web professionnel pour ton activité.',wa('Bonjour, je souhaite commander un site web professionnel.'),'Commander mon site']
+ ['book','Rédaction de mémoires','Un accompagnement personnalisé pour réaliser tes mémoires et tes travaux.',wa('Bonjour, je souhaite un accompagnement pour mon mémoire.'),'Demander','svc-memoire.png'],
+ ['laptop','Travaux informatiques','Développement et réalisation de projets informatiques.',wa('Bonjour, j’ai un projet informatique à vous confier.'),'Demander','svc-travaux.jpg'],
+ ['check','Correction et mise en forme','Correction, mise en forme et structuration de tes documents.',wa('Bonjour, je voudrais faire corriger et mettre en forme un document.'),'Demander','svc-mise-en-forme.jpg'],
+ ['tool','Dépannage d’ordinateurs','Diagnostic et réparation de ton ordinateur, matériel ou logiciel.',wa('Bonjour, mon ordinateur a un problème : pouvez-vous m’aider ?'),'Demander une réparation','svc-depannage.jpg'],
+ ['web','Création de site web','Commande un site web professionnel pour ton activité.',wa('Bonjour, je souhaite commander un site web professionnel.'),'Commander mon site','svc-site.jpg']
 ];
 const IC={book:'<path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2zM4 19a2 2 0 012-2h13"/>',laptop:'<rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 19h20"/>',check:'<path d="M7 3h8l4 4v14H7zM9 14l2.5 2.5L16 12"/>',tool:'<path d="M14 6a4 4 0 005 5l-9 9a2.1 2.1 0 01-3-3l9-9a4 4 0 00-2-2z"/>',web:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -302,9 +303,9 @@ bg.onclick=()=>{const o=nv.classList.toggle('on');bg.setAttribute('aria-expanded
 nv.addEventListener('click',e=>{if(e.target.closest('a')){nv.classList.remove('on');bg.setAttribute('aria-expanded',false)}});
 
 /* Services et formations (aucun prix affiché) */
-$('#srv').innerHTML=SERVICES.map(s=>`<div class="card"><div class="ic"><svg viewBox="0 0 24 24">${IC[s[0]]}</svg></div><h3>${esc(s[1])}</h3><p>${esc(s[2])}</p><a class="btn b4" target="_blank" rel="noopener" href="${s[3]}">${esc(s[4])}</a></div>`).join('');
+$('#srv').innerHTML=SERVICES.map(s=>`<div class="card">${s[5]?`<img class="si" src="img/${s[5]}" alt="" loading="lazy">`:''}<div class="ic"><svg viewBox="0 0 24 24">${IC[s[0]]}</svg></div><h3>${esc(s[1])}</h3><p>${esc(s[2])}</p><a class="btn b4" target="_blank" rel="noopener" href="${s[3]}">${esc(s[4])}</a></div>`).join('');
 const FPH=[['initiation','telephone'],['bureautique','conf'],['maintenance','tech'],['reseaux','tech'],['web','gagner'],['applications','micro'],['donnees','conf']];
-$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="${FPH[i][0]}.jpg|${FPH[i][0]}.png|${FPH[i][1]}.jpg"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-ask="${i}">Demander le tarif</button><a class="btn b4" data-app href="${APP_URL}">Je m’inscris</a></div></div>`).join('');
+$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="img/${FPH[i][0]}.jpg|img/${FPH[i][0]}.png|${FPH[i][1]}.jpg"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-ask="${i}">Demander le tarif</button><a class="btn b4" data-app href="${APP_URL}">Je m’inscris</a></div></div>`).join('');
 
 /* ================= Annonces et promotions ================= */
 const finMs=a=>{if(!a.fin)return 0;const d=a.fin.toDate?a.fin.toDate():new Date(a.fin);const t=d.getTime();return isNaN(t)?0:t};
