@@ -190,6 +190,33 @@ footer b{color:#fff}
   .hero{align-items:center}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+/* Formulaire de demande de formation */
+#dm{position:fixed;inset:0;z-index:200;background:rgba(11,31,107,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center}
+#dm[hidden]{display:none}
+.dmb{position:relative;background:#fff;width:100%;max-width:560px;max-height:94vh;overflow:auto;border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+@media(min-width:640px){#dm{align-items:center}.dmb{border-radius:22px}}
+.dmx{position:absolute;top:10px;right:12px;z-index:2;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:22px;line-height:1;cursor:pointer}
+.dmh{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:20px 52px 16px 22px;border-bottom:4px solid var(--yel)}
+.dmh small{opacity:.8;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}.dmh h3{margin:4px 0 0;font-size:1.25rem;color:#fff}
+.dmp{display:flex;gap:6px;margin-top:12px}.dmp i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.3)}.dmp i.on{background:var(--yel)}.dmpl{font-size:.75rem;opacity:.85;margin-top:6px}
+.dmw{padding:18px 22px 22px;color:var(--ink)}.dmw h4{margin:18px 0 8px;color:var(--navy);font-size:1.02rem}.dmw h4:first-child{margin-top:0}
+.dmc{text-align:center}.dmok{font-size:2.4rem;margin:4px 0}.dmm{text-align:center;color:var(--muted)}
+.dml{display:block;margin:10px 0;font-weight:600;font-size:.88rem}.dml em{font-weight:400;color:var(--muted);font-style:normal}
+.dml input:not([type=file]),.dmw textarea{display:block;width:100%;margin-top:5px;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;background:#fff;color:var(--ink);box-sizing:border-box}
+.dml input:focus,.dmw textarea:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.dmph{display:flex;gap:10px;align-items:center;margin-top:6px}.dmav{width:58px;height:58px;border-radius:50%;overflow:hidden;background:var(--sky);border:2px solid var(--line);display:block}.dmav img{width:100%;height:100%;object-fit:cover;display:block}
+.dmn{margin:6px 0;font-size:.9rem;color:var(--muted)}.dmi{font-size:.82rem;background:var(--sky);border-radius:10px;padding:10px 12px;margin:10px 0;color:var(--navy)}
+.dmq{margin:14px 0}.dmq>b{display:block;margin-bottom:8px;font-size:.92rem}
+.dmr{display:flex;flex-wrap:wrap;gap:8px}.ch{position:relative;display:inline-flex}.ch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.ch span{padding:9px 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;font-weight:600;font-size:.88rem}
+.ch input:checked+span{background:var(--navy);color:#fff;border-color:var(--navy)}.ch input:focus-visible+span{outline:2px solid var(--blue);outline-offset:2px}
+.dmrec{display:flex;flex-direction:column;gap:3px;background:var(--sky);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:.86rem}.dmrec b{color:var(--navy)}
+.dmref{display:inline-block;background:var(--sky);color:var(--navy);border-radius:999px;padding:6px 14px;font-size:.82rem;font-weight:600;margin:6px 0 14px}
+.dme{color:var(--red);font-size:.86rem;min-height:1.2em;margin:10px 0 0}
+.dma{display:flex;gap:10px;margin-top:12px}.dma.col{flex-direction:column}
+.dmbt{flex:1;border:0;border-radius:999px;padding:13px 18px;background:var(--navy);color:#fff;font:inherit;font-weight:700;cursor:pointer;text-align:center}
+.dmbt.s{background:var(--sky);color:var(--navy)}.dmbt:disabled{opacity:.6}
+.dmph .dmbt{flex:none;padding:9px 14px;font-size:.85rem}
 </style>
 </head>
 <body>
@@ -308,7 +335,7 @@ nv.addEventListener('click',e=>{if(e.target.closest('a')){nv.classList.remove('o
 /* Services et formations (aucun prix affiché) */
 $('#srv').innerHTML=SERVICES.map(s=>`<div class="card">${s[5]?`<img class="si" src="${encodeURI(s[5].split('|')[0])}" data-alt="${esc(s[5])}" alt="" loading="lazy" onerror="var a=(this.dataset.alt||'').split('|'),i=(+this.dataset.i||0)+1;if(a[i]){this.dataset.i=i;this.src=encodeURI(a[i])}else this.style.display='none'">`:''}<div class="ic"><svg viewBox="0 0 24 24">${IC[s[0]]}</svg></div><h3>${esc(s[1])}</h3><p>${esc(s[2])}</p><a class="btn b4" target="_blank" rel="noopener" href="${s[3]}">${esc(s[4])}</a></div>`).join('');
 const FPH=['Initiation.png|initiation.png|informatique.jpg','bureautique.jpg|conf.jpg','maintenance.jpg|mainte.jpg|tech.jpg','réseau.jpg|reseau.jpg|tech.jpg','web.jpg|gagner.jpg','code.jpg|informatique-1.jpg|micro.jpg','sql.jpg|conf.jpg','design.jpg|design.jpg|graphisme.jpg|portrait.jpg|tech.jpg'];
-$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="${FPH[i]}"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-ask="${i}">Demander le tarif</button><a class="btn b4" data-app href="${APP_URL}">Je m’inscris</a></div></div>`).join('');
+$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="${FPH[i]}"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-req="${i}">Demander cette formation</button></div></div>`).join('');
 
 $('#nbf').textContent=FORMATIONS.length;
 
@@ -388,6 +415,107 @@ async function envoyer(q){if(nb>=20){add('b','Pour aujourd’hui, on a beaucoup 
 nb++;add('u',q);const w=add('b','…');
 try{if(!chat)await init();const r=await chat.sendMessage(q);w.textContent=r.response.text()}catch(x){w.remove();repli(q,x)}}
 $('#sf').onsubmit=e=>{e.preventDefault();const q=si.value.trim();if(!q)return;si.value='';envoyer(q)};
+</script>
+<script>
+/* ===== Demande de formation : connexion Google, questions par domaine, fiches PDF ===== */
+(function(){
+const SDK='https://www.gstatic.com/firebasejs/11.10.0/';
+let FX=null;
+const fx=()=>FX||(FX=(async()=>{const[A,Au,F]=await Promise.all([import(SDK+'firebase-app.js'),import(SDK+'firebase-auth.js'),import(SDK+'firebase-firestore.js')]);let app;try{app=A.getApp()}catch(e){app=A.initializeApp(FB)}return{Au,F,auth:Au.getAuth(app),db:F.getFirestore(app)}})());
+const COM=[['niveau','Quel est ton niveau actuel ?','r',['Je débute complètement','J’ai quelques bases','Je me débrouille déjà']],['appareil','Avec quel appareil vas-tu apprendre ?','r',['Téléphone','Ordinateur','Les deux']],['dispo','Quand es-tu disponible ?','c',['Matin','Après-midi','Soir','Week-end']],['format','Comment préfères-tu recevoir les explications ?','c',['Texte écrit','Audios','Images et schémas','Exercices pratiques']]];
+const DOM={
+'Initiation à l’informatique':[['d1','Que veux-tu apprendre en premier ?','c',['Utiliser un téléphone ou un ordinateur','Internet et e-mail','Écrire un document','Sécurité et vie privée']],['d2','As-tu déjà utilisé un ordinateur ?','r',['Jamais','Quelques fois','Souvent']]],
+'Bureautique':[['d1','Quels logiciels veux-tu maîtriser ?','c',['Word','Excel','PowerPoint','Tous les trois']],['d2','Pour quel usage principal ?','r',['Travail ou bureau','Études ou mémoire','Mon activité','Autre']]],
+'Maintenance':[['d1','Que veux-tu savoir réparer ?','c',['Problèmes logiciels et virus','Pannes matérielles','Installation de Windows','Smartphones']],['d2','As-tu déjà ouvert un ordinateur ?','r',['Jamais','Une fois','Souvent']]],
+'Réseaux':[['d1','Qu’est-ce qui t’intéresse ?','c',['Installer un Wi-Fi','Câblage et configuration','Sécurité réseau','Réseau d’entreprise ou de cybercafé']],['d2','Tes notions de réseau','r',['Aucune','Quelques notions','Bonnes notions']]],
+'Développement web':[['d1','Que veux-tu apprendre ?','c',['HTML et CSS','JavaScript','Créer un site complet','Application web mobile']],['d2','Ton projet','r',['Mon propre site','Travailler en freelance','Études','Curiosité']]],
+'Applications de bureau':[['d1','Quel type d’application veux-tu créer ?','c',['Gestion de stock ou ventes','Facturation','Gestion d’école','Autre']],['d2','Langage de programmation connu','r',['Aucun','Python','Java ou C#','Autre']]],
+'Bases de données':[['d1','Que veux-tu apprendre ?','c',['Concevoir une base','SQL','Access ou MySQL','Gérer les données d’une entreprise']],['d2','As-tu déjà utilisé des tableaux (Excel) ?','r',['Jamais','Un peu','Souvent']]],
+'Design graphique':[['d1','Qu’est-ce qui t’attire le plus ?','c',['Retouche de photos','Création de logos','Affiches et flyers','Montage vidéo']],['d2','Quel logiciel connais-tu déjà ?','r',['Aucun','Canva','Photoshop','Autre']]]};
+const QS=()=>COM.concat(DOM[S.f]||[]);
+const ICO='<svg viewBox="0 0 24 24" width="100%" height="100%"><circle cx="12" cy="9" r="4" fill="#9db4ff"/><path d="M4 22c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#9db4ff"/></svg>';
+let S={};
+const dm=document.createElement('div');dm.id='dm';dm.hidden=true;
+dm.innerHTML='<div class="dmb" role="dialog" aria-modal="true" aria-labelledby="dmT"><button class="dmx" type="button" aria-label="Fermer">×</button><div id="dmc"></div></div>';
+document.body.appendChild(dm);
+const C=dm.querySelector('#dmc'),B=dm.querySelector('.dmb');
+const close=()=>{dm.hidden=true;document.body.style.overflow=''};
+const err=m=>{const e=C.querySelector('#dme');if(e)e.textContent=m||''};
+const dt=d=>new Date((d.cree&&d.cree.seconds?d.cree.seconds:Date.now()/1e3)*1e3).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+const ref=d=>'SA-'+new Date((d.cree&&d.cree.seconds?d.cree.seconds:Date.now()/1e3)*1e3).getFullYear()+'-'+String(d.id||'000000').slice(0,6).toUpperCase();
+const head=p=>`<div class="dmh"><small>Demande de formation</small><h3 id="dmT">${esc(S.f)}</h3>${p==null?'':'<div class="dmp">'+[0,1,2].map(i=>`<i class="${i<=p?'on':''}"></i>`).join('')+'</div><div class="dmpl">Étape '+(p+1)+' sur 3</div>'}</div>`;
+const rad=(n,o)=>`<div class="dmr">${o.map(x=>`<label class="ch"><input type="radio" name="s_${n}" data-s="${n}" value="${x[0]}" ${S[n]===x[0]?'checked':''}><span>${esc(x[1])}</span></label>`).join('')}</div>`;
+const nav=(a,l,back)=>`<p class="dme" id="dme"></p><div class="dma">${back?'<button class="dmbt s" data-a="bk" type="button">Retour</button>':''}<button class="dmbt" data-a="${a}" type="button">${l}</button></div>`;
+function render(keep){const t=B.scrollTop;C.innerHTML=head(S.step)+'<div class="dmw">'+[v1,v2,v3][S.step]()+'</div>';B.scrollTop=keep?t:0}
+function v1(){const an=S.mode==='anonyme';return `<h4>Toi</h4>
+<label class="dml">Nom complet<input data-s="nom" value="${esc(S.nom)}" maxlength="80" autocomplete="name"></label>
+<label class="dml">Téléphone <em>(facultatif)</em><input data-s="tel" value="${esc(S.tel)}" maxlength="30" inputmode="tel"></label>
+<div class="dml">Photo <em>(facultatif)</em><div class="dmph"><span class="dmav">${S.photo?`<img src="${S.photo}" alt="">`:ICO}</span><label class="dmbt s">Importer<input id="dmf" type="file" accept="image/*" hidden></label>${S.photo?'<button class="dmbt s" type="button" data-a="nophoto">Retirer</button>':''}</div></div>
+<h4>Dans les groupes</h4><p class="dmn">Comment veux-tu apparaître auprès des autres apprenants ?</p>
+${rad('mode',[['visible','Mon nom est visible'],['anonyme','Je préfère rester anonyme']])}
+${an?`<p class="dmn">Souhaites-tu un surnom pour masquer ton vrai nom ?</p>${rad('sur',[['oui','Oui, je choisis un surnom'],['non','Non, simplement anonyme']])}${S.sur==='oui'?`<label class="dml">Ton surnom<input data-s="surnom" value="${esc(S.surnom)}" maxlength="30"></label>`:''}<p class="dmi">En mode anonyme, tu écris ou tu dictes : ta voix est transcrite et le formateur entend seulement une voix de synthèse.</p>`:''}
+${nav('n1','Continuer')}`}
+function v2(){return `<h4>Tes besoins pour « ${esc(S.f)} »</h4>`+QS().map(q=>`<div class="dmq"><b>${esc(q[1])}</b><span class="dmr">${q[3].map(o=>{const v=S.rep[q[0]],on=q[2]==='r'?v===o:(v||[]).includes(o);return `<label class="ch"><input type="${q[2]==='r'?'radio':'checkbox'}" name="q_${q[0]}" data-q="${q[0]}" value="${esc(o)}" ${on?'checked':''}><span>${esc(o)}</span></label>`}).join('')}</span></div>`).join('')+nav('n2','Continuer',1)}
+function v3(){const id=S.mode==='anonyme'?'Anonyme'+(S.sur==='oui'&&S.surnom?' · surnom « '+esc(S.surnom)+' »':''):'Nom visible';return `<h4>Dis-nous qui tu es</h4><p class="dmn">Présente-toi librement : ton parcours, ce que tu attends de cette formation, ton objectif.</p><textarea data-s="pres" maxlength="1000" rows="6" placeholder="Écris ici avec tes propres mots…">${esc(S.pres)}</textarea><div class="dmrec"><b>Récapitulatif</b><span>Formation : ${esc(S.f)}</span><span>Nom : ${esc(S.nom)}</span><span>Dans les groupes : ${id}</span></div>${nav('send','Envoyer ma demande',1)}`}
+function statusView(d,fresh){S.cur=d;const ok=d.statut==='validée',pre=esc((d.nom||'').split(' ')[0]);
+C.innerHTML=head()+`<div class="dmw dmc"><div class="dmok">${ok?'✓':'⏳'}</div><h4>${ok?'Demande validée':'Demande en cours d’examen'}</h4><p>${ok?`Félicitations ${pre} ! Ton admission en <b>${esc(d.formation)}</b> est confirmée. Télécharge ta fiche d’admission.`:`${pre}, ${fresh?'ta demande a bien été envoyée. ':''}elle est en cours d’examen. Notre équipe s’en occupe et te répondra très bientôt.`}</p><div class="dmref">Réf. ${ref(d)} · ${dt(d)}</div><div class="dma col">${ok?'<button class="dmbt" data-a="dl:adm" type="button">Télécharger ma fiche d’admission</button>':''}<button class="dmbt${ok?' s':''}" data-a="dl:dem" type="button">Télécharger ma fiche de demande</button><button class="dmbt s" data-a="close" type="button">Fermer</button></div></div>`;B.scrollTop=0}
+function loginView(){C.innerHTML=head()+`<div class="dmw dmc"><div class="dmok">🔐</div><h4>Connecte-toi pour continuer</h4><p>Pour demander la formation <b>${esc(S.f)}</b>, connecte-toi avec ton compte Google. Si tu es déjà inscrit(e), tu retrouveras ton profil.</p><p class="dme" id="dme"></p><div class="dma col"><button class="dmbt" data-a="login" type="button">Continuer avec Google</button><button class="dmbt s" data-a="close" type="button">Plus tard</button></div></div>`}
+async function after(){const{F,db}=S.x,u=S.u;C.innerHTML=head()+'<p class="dmw dmm">Chargement…</p>';let ex=null;
+try{const s=await F.getDocs(F.query(F.collection(db,'demandes'),F.where('uid','==',u.uid)));ex=s.docs.map(x=>({id:x.id,...x.data()})).filter(x=>x.formation===S.f&&(x.statut==='en attente'||x.statut==='validée')).sort((a,b)=>((b.cree&&b.cree.seconds)||0)-((a.cree&&a.cree.seconds)||0))[0]||null}catch(e){}
+if(ex)return statusView(ex);
+try{const r=F.doc(db,'etudiants',u.uid),g=await F.getDoc(r);if(g.exists()){if(g.data().nom)S.nom=g.data().nom}else await F.setDoc(r,{nom:u.displayName||'',email:u.email||'',vu:F.serverTimestamp()},{merge:true})}catch(e){}
+if(!S.nom)S.nom=u.displayName||'';S.step=0;render()}
+async function open(i){const f=FORMATIONS[i];S={i,f:f[0],prix:f[2],step:0,rep:{},nom:'',tel:'',photo:'',mode:'',sur:'',surnom:'',pres:''};dm.hidden=false;document.body.style.overflow='hidden';C.innerHTML=head()+'<p class="dmw dmm">Chargement…</p>';
+try{S.x=await fx();await S.x.auth.authStateReady();S.u=S.x.auth.currentUser;if(S.u)await after();else loginView()}catch(e){FX=null;C.innerHTML=head()+'<div class="dmw dmc"><p>Impossible de charger le formulaire. Vérifie ta connexion.</p><div class="dma col"><button class="dmbt s" data-a="close" type="button">Fermer</button></div></div>'}}
+async function login(){const{Au,auth}=S.x;try{const r=await Au.signInWithPopup(auth,new Au.GoogleAuthProvider());S.u=r.user;await after()}catch(e){err(e&&e.code==='auth/popup-blocked'?'La fenêtre Google est bloquée : autorise les pop-ups puis réessaie.':e&&e.code==='auth/popup-closed-by-user'?'':'Connexion impossible. Réessaie.')}}
+function check(n){if(n===1){if(S.nom.trim().length<3)return'Écris ton nom complet.';if(!S.mode)return'Choisis comment tu veux apparaître dans les groupes.';if(S.mode==='anonyme'){if(!S.sur)return'Dis-nous si tu veux un surnom.';if(S.sur==='oui'&&S.surnom.trim().length<2)return'Écris le surnom que tu veux utiliser.'}}
+if(n===2)for(const q of QS()){const v=S.rep[q[0]];if(!v||!v.length)return'Réponds à toutes les questions pour continuer.'}return''}
+async function send(){const b=C.querySelector('[data-a=send]');b.disabled=true;b.textContent='Envoi…';
+try{const{F,db}=S.x,u=S.u,iden={mode:S.mode,surnom:S.mode==='anonyme'&&S.sur==='oui'?S.surnom.trim():''};
+const d={uid:u.uid,nom:S.nom.trim(),email:u.email||'',tel:S.tel.trim(),formation:S.f,prix:S.prix,statut:'en attente',identite:iden,reponses:QS().map(q=>({q:q[1],r:[].concat(S.rep[q[0]]||[]).join(', ')})),presentation:S.pres.trim(),photo:S.photo,note:(iden.mode==='anonyme'?'Anonyme'+(iden.surnom?' (« '+iden.surnom+' »)':''):'Nom visible')+' · '+(S.rep.niveau||''),cree:F.serverTimestamp()};
+const r=await F.addDoc(F.collection(db,'demandes'),d);statusView({...d,id:r.id,cree:{seconds:Math.floor(Date.now()/1e3)}},true)}
+catch(e){b.disabled=false;b.textContent='Envoyer ma demande';err('Envoi impossible'+(e&&e.code==='permission-denied'?' : publie d’abord les nouvelles règles Firebase.':'. Vérifie ta connexion et réessaie.'))}}
+const mini=f=>new Promise((ok,ko)=>{const r=new FileReader();r.onerror=ko;r.onload=()=>{const im=new Image();im.onerror=ko;im.onload=()=>{const n=240,c=document.createElement('canvas');c.width=c.height=n;const m=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);ok(c.toDataURL('image/jpeg',.82))};im.src=r.result};r.readAsDataURL(f)});
+dm.addEventListener('click',async e=>{if(e.target===dm||e.target.closest('.dmx'))return close();const a=e.target.closest('[data-a]');if(!a)return;const k=a.dataset.a;
+if(k==='close')close();else if(k==='login')login();else if(k==='bk'){S.step--;render()}
+else if(k==='nophoto'){S.photo='';render(1)}
+else if(k==='n1'||k==='n2'){const m=check(k==='n1'?1:2);if(m)return err(m);S.step=k==='n1'?1:2;render()}
+else if(k==='send')send();
+else if(k.startsWith('dl:')){a.disabled=true;try{await pdf(S.cur,k.slice(3))}catch(x){toast('Téléchargement impossible, réessaie.')}a.disabled=false}});
+dm.addEventListener('change',async e=>{const t=e.target;
+if(t.id==='dmf'&&t.files[0]){try{S.photo=await mini(t.files[0]);render(1)}catch(x){err('Photo illisible, essaie une autre image.')}return}
+if(t.dataset.q){const k=t.dataset.q;if(t.type==='radio')S.rep[k]=t.value;else{const a=S.rep[k]||[];S.rep[k]=t.checked?a.concat(t.value):a.filter(v=>v!==t.value)}return}
+if(t.dataset.s&&t.type==='radio'){S[t.dataset.s]=t.value;render(1)}});
+dm.addEventListener('input',e=>{const t=e.target;if(t.dataset.s&&t.type!=='radio')S[t.dataset.s]=t.value});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-req]');if(b)open(+b.dataset.req)});
+/* ===== Fiches PDF ===== */
+const jl=()=>window.jspdf?Promise.resolve():new Promise((ok,ko)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';s.onload=ok;s.onerror=ko;document.head.appendChild(s)});
+async function pdf(d,kind){await jl();const adm=kind==='adm',o=new window.jspdf.jsPDF({unit:'mm',format:'a4'}),W=210,M=16,CW=W-2*M;
+const NV=[11,31,107],BL=[31,79,216],YL=[255,212,0],SK=[244,247,255],LN=[219,227,255],IN=[16,21,63],MU=[91,97,146],WH=[255,255,255],GR=[22,163,74];
+const fc=c=>o.setFillColor(c[0],c[1],c[2]),tc=c=>o.setTextColor(c[0],c[1],c[2]),dc=c=>o.setDrawColor(c[0],c[1],c[2]),ft=(s,z)=>{o.setFont('helvetica',s);o.setFontSize(z)};
+fc(NV);o.rect(0,0,W,40,'F');fc(YL);o.rect(0,40,W,2.2,'F');o.circle(M+9,20,9,'F');tc(NV);ft('bold',18);o.text('S',M+9,23.5,{align:'center'});
+tc(WH);ft('bold',19);o.text('SINGANDU ACADEMIA',M+22,19);tc(YL);ft('italic',9);o.text('Apprendre, c’est conquérir l’invisible',M+22,26);tc([200,214,255]);ft('normal',8);o.text('Formation informatique · Mbuji-Mayi',M+22,32);o.text(dt(d),W-M,19,{align:'right'});
+tc(NV);ft('bold',20);o.text(adm?'FICHE D’ADMISSION':'FICHE DE DEMANDE',M,58);tc(MU);ft('normal',9);o.text('Réf. '+ref(d),M,64);
+const ok=d.statut==='validée',bt=ok?'VALIDÉE':'EN COURS D’EXAMEN',bw=ok?30:48;fc(ok?GR:YL);o.roundedRect(W-M-bw,51,bw,9,4.5,4.5,'F');tc(ok?WH:NV);ft('bold',8.5);o.text(bt,W-M-bw/2,56.8,{align:'center'});
+let y=72;const pg=h=>{if(y+h>270){o.addPage();y=20}};
+const px=M+4,py=y+5;fc(SK);dc(LN);o.setLineWidth(.3);o.roundedRect(M,y,CW,40,3,3,'FD');
+let ph=false;if(d.photo)try{o.addImage(d.photo,'JPEG',px,py,30,30);ph=true}catch(e){}
+if(!ph){fc(LN);o.rect(px,py,30,30,'F');fc([157,180,255]);o.circle(px+15,py+11,6,'F');o.roundedRect(px+5,py+19,20,9,4,4,'F')}
+dc(NV);o.setLineWidth(.6);o.rect(px,py,30,30);
+tc(NV);ft('bold',14);o.text(o.splitTextToSize(d.nom||'—',CW-44)[0],M+40,y+13);tc(IN);ft('normal',9.5);o.text(d.email||'—',M+40,y+20);if(d.tel)o.text(d.tel,M+40,y+26);
+const id=d.identite||{};tc(MU);ft('normal',8.5);o.text('Dans les groupes : '+(id.mode==='anonyme'?'anonyme'+(id.surnom?' (surnom « '+id.surnom+' »)':''):'nom visible'),M+40,y+34);y+=47;
+function sec(t,rows,wide){const L=rows.map(r=>({a:o.splitTextToSize(String(r[0]),wide?CW-10:48),b:o.splitTextToSize(String(r[1]||'—'),wide?CW-10:CW-62)}));
+const hs=L.map(l=>wide?l.b.length*4.8+2:Math.max(l.a.length,l.b.length)*4.8+2),h=14+hs.reduce((a,b)=>a+b,0);pg(h);
+fc(SK);dc(LN);o.setLineWidth(.3);o.roundedRect(M,y,CW,h,3,3,'FD');fc(BL);o.rect(M,y+4,1.6,6,'F');tc(NV);ft('bold',10.5);o.text(t.toUpperCase(),M+5,y+8.5);let yy=y+16;
+L.forEach((l,i)=>{if(wide){tc(IN);ft('normal',9.5);o.text(l.b,M+5,yy)}else{tc(MU);ft('bold',8.5);o.text(l.a,M+5,yy);tc(IN);ft('normal',9.5);o.text(l.b,M+58,yy)}yy+=hs[i]});y+=h+5}
+if(adm){const n=(d.prixNormal!=null?d.prixNormal:d.prix),p=d.prixPromo,pr=p!=null&&p!==''&&+p<+n;pg(38);fc(SK);dc(LN);o.roundedRect(M,y,CW,34,3,3,'FD');fc(BL);o.rect(M,y+4,1.6,6,'F');tc(NV);ft('bold',10.5);o.text('MONTANT DE LA FORMATION',M+5,y+8.5);
+if(pr){tc(MU);ft('normal',13);const t=n+' $',w=o.getTextWidth(t);o.text(t,M+5,y+23);dc(MU);o.setLineWidth(.5);o.line(M+4,y+21.5,M+6+w,y+21.5);tc(GR);ft('bold',22);o.text(p+' $',M+8+w+6,y+24);tc(MU);ft('normal',8.5);o.text('Prix promotionnel',M+8+w+6,y+30)}else{tc(NV);ft('bold',22);o.text(n+' $',M+5,y+24)}
+y+=39;sec('Bienvenue',[['Félicitations ! Ta demande est validée. Tu seras ajouté(e) à ton groupe de formation dans l’application. Frais d’inscription : 5 $, non remboursables. Paiement en deux tranches, la seconde 15 jours après le début.','']].map(r=>[r[0],r[1]]),1);y-=0}
+sec('Formation demandée',[['Formation',d.formation]].concat((d.reponses||[]).map(r=>[r.q,r.r])));
+if(d.presentation)sec('Présentation de l’apprenant',[[d.presentation,'']],1);
+const n=o.getNumberOfPages();for(let i=1;i<=n;i++){o.setPage(i);dc(YL);o.setLineWidth(.8);o.line(M,284,W-M,284);tc(MU);ft('normal',8);o.text('Singandu Academia · Mbuji-Mayi · +243 860 269 169 · singanduacademia@gmail.com',M,289);o.text('Page '+i+'/'+n,W-M,289,{align:'right'})}
+o.save((adm?'Fiche-admission-':'Fiche-demande-')+'Singandu-'+ref(d)+'.pdf')}
+})();
 </script>
 </body>
 </html>
