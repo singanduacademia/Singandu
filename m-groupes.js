@@ -7,16 +7,18 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .gm{max-width:82%;margin:8px 0;padding:8px 12px;border-radius:14px;background:#eef2ff;word-wrap:break-word}
 .gm.me{margin-left:auto;background:#fff3b0}.gm b{font-size:.8em;color:#2a3fb5}.gm p{margin:2px 0}
 .gm img{max-width:100%;border-radius:10px;display:block;margin:4px 0}.gm small{color:#889;font-size:.7em;display:block}
-.gm a{display:block;padding:6px 8px;background:#fff;border-radius:8px;margin:4px 0;text-decoration:none}
+.gm a{display:block;padding:6px 8px;background:#fff;border-radius:8px;margin:4px 0;text-decoration:none}.gm a.gb{display:inline-block;background:#1b2a8a;color:#fff;padding:8px 14px;border-radius:20px;font-weight:600;margin:4px 0}
 #gM{max-height:52vh;overflow:auto}.gf{display:flex;gap:6px;align-items:center;margin-top:8px}.gf input[type=text]{flex:1}
 .gset{display:flex;gap:6px;flex-wrap:wrap}
 </style>`);
 $('#app .wrap').insertAdjacentHTML('beforeend',`<section class="pane" data-p="grp2"><div id="gL"></div><div id="gR" hidden>
 <div class="card"><button class="ghost" id="gBk" type="button">← Retour</button> <b id="gT"></b></div>
 <div class="card gset" id="gSet"><button class="ghost" id="gPs" type="button">Changer mon pseudo</button><button class="ghost" id="gAn" type="button"></button></div>
-<div class="card"><div id="gM"></div><div class="gf" id="gFm"><label class="ghost" style="padding:8px 12px;cursor:pointer">📎<input id="gF" type="file" hidden accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"></label><input id="gI" type="text" maxlength="1000" placeholder="Votre message"><button id="gS" type="button">Envoyer</button></div><p class="mu" id="gE"></p></div></div></section>`);
+<div class="card"><div id="gM"></div><div class="gf" id="gFm"><label class="ghost" style="padding:8px 12px;cursor:pointer">📎<input id="gF" type="file" hidden accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"></label><input id="gI" type="text" maxlength="1000" placeholder="Message ou lien (Drive, YouTube…)"><button id="gS" type="button">Envoyer</button></div><p class="mu" id="gE"></p></div></div></section>`);
 $('#bn [data-t="nt"]').insertAdjacentHTML('beforebegin',`<button data-t="grp2" id="tGrp" type="button"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0112 0M15 20a5 5 0 016 0"/></svg>Groupes</button>`);
 $('#tGrp').onclick=()=>{$$('.pane').forEach(p=>p.classList.toggle('on',p.dataset.p==='grp2'));$('[data-p=grp2]').hidden=false;$$('#bn button').forEach(b=>b.classList.toggle('on',b.id==='tGrp'));const t=$('#ttl');if(t)t.textContent='Groupes';back()};
+const lb=u=>/youtu|facebook|fb\.watch|vimeo/.test(u)?'▶ Voir la vidéo':/drive\.google|docs\.google|dropbox|onedrive|1drv/.test(u)?'📄 Ouvrir le document':'🔗 Ouvrir le lien';
+const lk=t=>esc(t).replace(/(https?:\/\/[^\s<]+)/g,u=>`<a class="gb" href="${u}" target="_blank" rel="noopener noreferrer">${lb(u)}</a>`);
 const isProf=()=>!isAd()&&cur&&cur.profEmail===mail();
 const pseudo=()=>{if(isProf())return'Formateur';const u=U().uid;return(cur.anon&&cur.anon[u]===false)?(user||'Apprenant'):((cur.pseudos&&cur.pseudos[u])||'Apprenant')};
 const anonTxt=()=>{$('#gAn').textContent=(cur.anon&&cur.anon[U().uid]===false)?'🕶 Passer en anonyme':'🕶 Anonyme : activé (toucher pour afficher mon nom)'};
@@ -34,12 +36,13 @@ $('#gL').hidden=true;$('#gR').hidden=false;$('#gT').textContent=cur.formation;$(
 if(isAd())db.collection('groupes_admin').doc(cur.id).get().then(d=>{names=d.exists?(d.data().noms||{}):{}}).catch(()=>{});
 unM=db.collection('groupes').doc(cur.id).collection('messages').orderBy('cree').limitToLast(100).onSnapshot(s=>{const me2=U().uid;
 $('#gM').innerHTML=s.docs.map(d=>d.data()).map(m=>{const h=m.cree?new Date(m.cree.seconds*1e3).toLocaleTimeString('fr',{hour:'2-digit',minute:'2-digit'}):'';
-return`<div class="gm ${m.uid===me2?'me':''}"><b>${esc(m.p)}${isAd()&&names[m.uid]?' ('+esc(names[m.uid])+')':''}</b>${m.t?`<p>${esc(m.t)}</p>`:''}${m.img?`<img src="${esc(m.img)}" alt="">`:''}${m.f?`<a href="${esc(m.f)}" target="_blank" rel="noopener">📎 ${esc(m.fn)}</a>`:''}<small>${h}</small></div>`}).join('')||'<p class="mu">Aucun message. Écrivez le premier.</p>';$('#gM').scrollTop=1e6},()=>{})};
+return`<div class="gm ${m.uid===me2?'me':''}"><b>${esc(m.p)}${isAd()&&names[m.uid]?' ('+esc(names[m.uid])+')':''}</b>${m.t?`<p>${lk(m.t)}</p>`:''}${m.img?`<img src="${esc(m.img)}" alt="">`:''}${m.f?`<a href="${esc(m.f)}" target="_blank" rel="noopener">📎 ${esc(m.fn)}</a>`:''}${m.fd?`<a href="${esc(m.fd)}" download="${esc(m.fn)}">📎 ${esc(m.fn)}</a>`:''}<small>${h}</small></div>`}).join('')||'<p class="mu">Aucun message. Écrivez le premier.</p>';$('#gM').scrollTop=1e6},()=>{})};
 async function send(x){const t=$('#gI').value.trim();if(!t&&!x)return;$('#gI').value='';await db.collection('groupes').doc(cur.id).collection('messages').add({uid:U().uid,p:pseudo(),t:t.slice(0,1000),...(x||{}),cree:TS()})}
 $('#gS').onclick=()=>send().catch(()=>wait($('#gE'),'Échec de l’envoi.'));$('#gI').onkeydown=e=>{if(e.key==='Enter')$('#gS').click()};
 $('#gF').onchange=async()=>{const f=$('#gF').files[0],E=$('#gE');$('#gF').value='';if(!f)return;
 try{if(f.type.startsWith('image/')){wait(E,'Envoi de la photo…');await send({img:await shrink(f)})}
-else{if(f.size>10*1048576)return wait(E,'Fichier trop lourd (10 Mo maximum).');wait(E,'Envoi du fichier…');st=st||firebase.storage();const r=st.ref(`groupes/${cur.id}/${Date.now()}-${f.name.replace(/[^\w.\-]/g,'_')}`);await r.put(f);await send({f:await r.getDownloadURL(),fn:f.name})}wait(E,'')}catch(e){wait(E,'Échec de l’envoi.')}};
+else{if(f.size>500*1024)return wait(E,'Fichier trop lourd (500 Ko maximum). Mettez-le sur Google Drive et collez le lien dans le message.');
+wait(E,'Envoi du fichier…');const d=await new Promise((ok,ko)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=ko;r.readAsDataURL(f)});await send({fd:d,fn:f.name.slice(0,80)})}wait(E,'')}catch(e){wait(E,'Échec de l’envoi.')}};
 $('#gPs').onclick=async()=>{const p=(prompt('Votre pseudo dans ce groupe :')||'').trim().slice(0,20);if(!p)return;try{await setMine('pseudos',p);await setMine('anon',true);anonTxt()}catch(e){}};
 $('#gAn').onclick=async()=>{try{await setMine('anon',cur.anon&&cur.anon[U().uid]===false);anonTxt()}catch(e){}};
 // ---- côté administrateur : créer un groupe ----
