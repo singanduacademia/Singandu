@@ -387,7 +387,11 @@ if(D.length){LISTE=D.concat(LISTE.filter(a=>a.id==='demo'||/^s\d/.test(a.id)));r
 addEventListener('load',()=>setTimeout(async()=>{try{const [app,F]=await Promise.all([fb(),import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')]);
 const s=await F.getDocs(F.query(F.collection(F.getFirestore(app),'catalogue'),F.limit(30)));
 const D=s.docs.map(d=>d.data()).filter(x=>x.nom).sort((a,b)=>((a.cree&&a.cree.seconds)||0)-((b.cree&&b.cree.seconds)||0));
-if(D.length){D.forEach(x=>{FORMATIONS.push([String(x.nom).slice(0,60),String(x.desc||'').slice(0,140),+x.prix||0]);FPH.push(x.photo||'')});rendF();peindre()}}catch(e){}},500));
+if(D.length){const k=n=>String(n).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’']/g,"'").trim();
+ D.forEach(x=>{const nm=String(x.nom).slice(0,60),i=FORMATIONS.findIndex(f=>k(f[0])===k(x.remplace||nm));
+  if(x.remplace){if(i>=0){if(x.desc)FORMATIONS[i][1]=String(x.desc).slice(0,140);if(+x.prix>0)FORMATIONS[i][2]=+x.prix;if(x.photo)FPH[i]=x.photo}}
+  else if(i<0){FORMATIONS.push([nm,String(x.desc||'').slice(0,140),+x.prix||0]);FPH.push(x.photo||'')}});
+ rendF();peindre()}}catch(e){}},500));
 
 /* Vidéo : ne se charge que si on appuie (économise les données) */
 (function(){if(!VIDEO.id)return;$('#videoS').hidden=false;$('#vt').textContent=VIDEO.titre;
