@@ -15,7 +15,7 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 </style>`);
 // ---- 1. onglets ----
 const P=$('[data-p=adm]'),card=s=>{const e=$(s);return e&&e.closest('.card')};
-const tabs=[['dem','Demandes'],['ins','Inscrits'],['grp','Groupes'],['for','Formations'],['con','Conseils'],['site','Site'],['ast','Assistant']];
+const tabs=[['dem','Demandes'],['ins','Inscrits'],['grp','Groupes'],['for','Formations'],['avis','Avis'],['con','Conseils'],['site','Site'],['ast','Assistant']];
 P.insertAdjacentHTML('afterbegin','<div id="aT">'+tabs.map(t=>`<button type="button" data-at="${t[0]}">${t[1]}<i hidden></i></button>`).join('')+'</div>'+tabs.map(t=>`<div class="ap" data-ap="${t[0]}" hidden></div>`).join(''));
 const pn=k=>P.querySelector(`[data-ap=${k}]`);
 [['dem','#rq'],['ins','#ins'],['site','#bPub'],['site','#bNo'],['site','#bSj'],['ast','#bSa']].forEach(([k,s])=>{const c=card(s);if(c)pn(k).append(c)});
@@ -35,7 +35,7 @@ n=a.filter(d=>d.statut==='en attente').length;$('#rq').innerHTML=a.filter(d=>FD=
 return`<div class="dq ${p?'pend':''}"><div><b>${esc(d.nom)}</b><small style="font-size:.92em;color:#1b2a8a;font-weight:700">🎓 ${esc(d.formation)}${d.prix?' · '+d.prix+' $':''}</small><small>${esc(d.email||'')} ${esc(d.tel||'')}</small>${d.note?`<small>${esc(d.note)}</small>`:''}${det(d)}</div><div class="dqa"><span class="bg ${p?'w':d.statut==='validée'?'o':'n'}">${esc(d.statut)}</span>${p?`<button ${a2} data-v="1">Valider</button><button class="ghost" ${a2} data-v="0">Refuser</button>`:''}</div></div>`}).join('')||`<p class="mu">${FD==='tr'?'Aucune demande traitée.':'Aucune demande en attente.'}</p>`}catch(e){}
 const i=$('#aT [data-at=dem] i');i.textContent=n;i.hidden=!n;
 if(typeof loadAs==='function')try{loadAs()}catch(e){}
-loadIns();loadSent();loadGR();loadCat()}
+loadIns();loadSent();loadGR();loadCat();loadAvis()}
 window.loadAdm=loadAdm;
 // ---- 3. inscrits ----
 async function loadIns(){try{const s=await db.collection('etudiants').limit(300).get();ETU=s.docs.map(d=>({uid:d.id,...d.data()})).sort((a,b)=>(b.vu?.seconds||0)-(a.vu?.seconds||0));try{const f=await db.collection('formateurs').get();FM={};f.docs.forEach(d=>FM[d.id]=d.data());window.FMT=f.docs.map(d=>({uid:d.id,...d.data()}));dispatchEvent(new Event('fmt'))}catch(e){}$('#ncnt').textContent='('+ETU.length+')';rnIns();fillT()}catch(e){$('#ins').innerHTML='<p class="mu">Liste indisponible.</p>'}}
@@ -63,12 +63,13 @@ unC=db.collection('notifs').where('to','==',u.uid).where('conseil','==',true).on
 // ---- gestion d'un inscrit : attribuer, valider, refuser, révoquer une formation ----
 document.body.insertAdjacentHTML('beforeend','<dialog id="dGu" style="border-radius:16px;max-width:92vw;width:420px"><h3 id="guN"></h3><div id="guL"></div><b>Attribuer une formation</b><label>Formation<select id="guF">'+F.map(f=>`<option>${esc(f[0])}</option>`).join('')+'</select></label><label>Prix promotionnel en $ <small>(facultatif)</small><input id="guP" inputmode="decimal"></label><div class="modes" style="margin-top:10px"><button id="guA" type="button">Attribuer</button><button id="guC" class="ghost" type="button">Fermer</button></div><p class="mu" id="guM"></p></dialog>');
 const nt=(u,titre,texte)=>db.collection('notifs').add({to:u,titre,texte,cree:TS()}).catch(()=>{});
-async function guLoad(){const L=$('#guL');try{const s=await db.collection('demandes').where('uid','==',gu.uid).get();const a=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(y.cree?.seconds||0)-(x.cree?.seconds||0));
-L.innerHTML=a.map(d=>{const t=`data-id="${d.id}" data-f="${esc(d.formation)}"`,st=d.statut;return`<div class="dq"><div><b>${esc(d.formation)}</b><small>${esc(st)}</small></div><div class="dqa">${st==='en attente'?`<button ${t} data-ga="valider">Valider</button><button class="ghost" ${t} data-ga="refuser">Refuser</button>`:st==='validée'?`<button class="ghost" ${t} data-ga="revoquer">Révoquer</button>`:`<button class="ghost" ${t} data-ga="valider">Rétablir</button>`}</div></div>`}).join('')||'<p class="mu">Aucune formation pour le moment.</p>'}catch(e){L.textContent='Liste indisponible.'}}
+async function guLoad(){const L=$('#guL');try{const s=await db.collection('demandes').where('uid','==',gu.uid).get();const a=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(y.cree?.seconds||0)-(x.cree?.seconds||0)),av=((await db.collection('avancement').doc(gu.uid).get().catch(()=>null))||{data:()=>({})}).data()||{};
+L.innerHTML=a.map(d=>{const t=`data-id="${d.id}" data-f="${esc(d.formation)}"`,st=d.statut;return`<div class="dq"><div><b>${esc(d.formation)}</b><small>${esc(st)}</small></div><div class="dqa">${st==='en attente'?`<button ${t} data-ga="valider">Valider</button><button class="ghost" ${t} data-ga="refuser">Refuser</button>`:st==='validée'?`<input type="number" min="0" max="100" value="${+av[slug(d.formation)]||0}" style="width:58px" title="Progression en %"><button class="ghost" ${t} data-ga="prog">%</button><button class="ghost" ${t} data-ga="revoquer">Révoquer</button>`:`<button class="ghost" ${t} data-ga="valider">Rétablir</button>`}</div></div>`}).join('')||'<p class="mu">Aucune formation pour le moment.</p>'}catch(e){L.textContent='Liste indisponible.'}}
 $('#ins').addEventListener('click',e=>{const b=e.target.closest('[data-gu]');if(!b)return;gu=ETU.find(x=>x.uid===b.dataset.gu);if(!gu)return;$('#guN').textContent=gu.nom||gu.email;$('#guM').textContent='';$('#guP').value='';guLoad();$('#dGu').showModal()});
 $('#guC').onclick=()=>$('#dGu').close();
 $('#dGu').addEventListener('click',async e=>{const b=e.target.closest('[data-ga]');if(!b)return;const k=b.dataset.ga,f=b.dataset.f,ref=db.collection('demandes').doc(b.dataset.id),M=$('#guM');
-try{if(k==='valider'){await ref.update({statut:'validée'});await nt(gu.uid,'Demande validée','Votre accès à la formation « '+f+' » est confirmé.')}
+try{if(k==='prog'){const pc=Math.max(0,Math.min(100,parseInt(b.parentElement.querySelector('input').value)||0));await db.collection('avancement').doc(gu.uid).set({[slug(f)]:pc},{merge:true});return wait(M,'Progression enregistrée : '+pc+' %.')}
+if(k==='valider'){await ref.update({statut:'validée'});await nt(gu.uid,'Demande validée','Votre accès à la formation « '+f+' » est confirmé.')}
 else if(k==='refuser'){await ref.update({statut:'refusée'});await nt(gu.uid,'Demande refusée','Votre demande pour « '+f+' » n’a pas été retenue.')}
 else if(k==='revoquer'){if(!confirm('Révoquer l’accès de '+(gu.nom||'cet apprenant')+' à « '+f+' » ? Il sera retiré de son groupe.'))return;await ref.update({statut:'révoquée'});
 const g=await db.collection('groupes').where('membres','array-contains',gu.uid).get();await Promise.all(g.docs.filter(x=>x.data().formation===f).map(x=>x.ref.update({membres:firebase.firestore.FieldValue.arrayRemove(gu.uid)})));await nt(gu.uid,'Accès retiré','Votre accès à la formation « '+f+' » a été retiré.')}
@@ -114,4 +115,11 @@ $('#cfL').onclick=async e=>{const E=e.target.closest('[data-ce]'),D=e.target.clo
 if(E){const k=E.dataset.ce,v=k.slice(2);if(k[0]==='b'){const s=SITE.find(x=>x[0]===v),o=OV(v);ed={base:1,nom:v,id:o&&o.id};fill(v,(o&&o.desc)||s[1],(o&&+o.prix)||s[2],o&&o.photo,1)}else{const c=CAT.find(x=>x.id===v);if(!c)return;ed={base:0,id:c.id,nom:c.nom};fill(c.nom,c.desc,c.prix,c.photo,0)}return}
 try{if(D){if(!confirm('Supprimer cette formation du site ? Les demandes déjà reçues restent.'))return;await db.collection('catalogue').doc(D.dataset.cd).delete()}
 else if(R){if(!confirm('Rétablir le texte et la photo d’origine de cette formation ?'))return;await db.collection('catalogue').doc(R.dataset.cr).delete()}else return;loadCat()}catch(x){wait($('#cfM'),'Échec.')}};
+
+// ---- onglet Avis : ce qui n'avance pas, signalé par les apprenants (3 avis maximum par formation) ----
+pn('avis').innerHTML='<div class="card"><h3>Avis des apprenants <span id="avC"></span></h3><p class="mu">Ce qui n’avance pas, signalé par les apprenants.</p><div id="avL"></div></div>';
+async function loadAvis(){try{const s=await db.collection('avis').limit(100).get();const a=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(y.cree?.seconds||0)-(x.cree?.seconds||0));
+$('#avC').textContent='('+a.filter(x=>!x.traite).length+' à traiter)';
+$('#avL').innerHTML=a.map(x=>`<div class="dq"><div><b>${esc(x.nom||'Apprenant')} · ${esc(x.formation)}</b><small>${x.cree?new Date(x.cree.seconds*1e3).toLocaleDateString('fr'):''}${x.traite?' · traité':''}</small><p style="margin:6px 0;white-space:pre-wrap">${esc(x.texte)}</p></div>${x.traite?'':`<div class="dqa"><button data-av="${esc(x.id)}" type="button">Traité</button></div>`}</div>`).join('')||'<p class="mu">Aucun avis pour le moment.</p>'}catch(e){$('#avL').innerHTML='<p class="mu">Avis indisponibles : ajoutez la règle « avis » dans Firebase.</p>'}}
+$('#avL').onclick=async e=>{const b=e.target.closest('[data-av]');if(!b)return;b.disabled=true;try{await db.collection('avis').doc(b.dataset.av).update({traite:true});loadAvis()}catch(x){b.disabled=false}};
 })();
