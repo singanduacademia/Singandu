@@ -335,7 +335,7 @@ nv.addEventListener('click',e=>{if(e.target.closest('a')){nv.classList.remove('o
 /* Services et formations (aucun prix affiché) */
 $('#srv').innerHTML=SERVICES.map(s=>`<div class="card">${s[5]?`<img class="si" src="${encodeURI(s[5].split('|')[0])}" data-alt="${esc(s[5])}" alt="" loading="lazy" onerror="var a=(this.dataset.alt||'').split('|'),i=(+this.dataset.i||0)+1;if(a[i]){this.dataset.i=i;this.src=encodeURI(a[i])}else this.style.display='none'">`:''}<div class="ic"><svg viewBox="0 0 24 24">${IC[s[0]]}</svg></div><h3>${esc(s[1])}</h3><p>${esc(s[2])}</p><a class="btn b4" target="_blank" rel="noopener" href="${s[3]}">${esc(s[4])}</a></div>`).join('');
 const FPH=['Initiation.png|initiation.png|informatique.jpg','bureautique.jpg|conf.jpg','maintenance.jpg|mainte.jpg|tech.jpg','réseau.jpg|reseau.jpg|tech.jpg','web.jpg|gagner.jpg','code.jpg|informatique-1.jpg|micro.jpg','sql.jpg|conf.jpg','design.jpg|design.jpg|graphisme.jpg|portrait.jpg|tech.jpg'];
-$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="${FPH[i]}"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-req="${i}">Demander cette formation</button></div></div>`).join('');
+$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="${FPH[i]}"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-req="${i}">M’inscrire à cette formation</button></div></div>`).join('');
 
 $('#nbf').textContent=FORMATIONS.length;
 

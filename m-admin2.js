@@ -10,6 +10,7 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .bg{font-size:.75em;border-radius:10px;padding:2px 8px;background:#e5e5e5}.bg.w{background:#ffd400}.bg.o{background:#c8f5d8}.bg.n{background:#ffd5d5}
 .ir>div{flex:1;min-width:0}#cbn{position:fixed;left:12px;right:12px;top:-120px;z-index:99;background:#1b2a8a;color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.3);transition:top .5s}
 #cbn.on{top:12px}#cbn small{opacity:.8;display:block}
+.dd{margin-top:6px}.dd summary{cursor:pointer;color:#1b2a8a;font-size:.85em}.dd ul{margin:6px 0;padding-left:18px;font-size:.85em}.dd p{font-size:.85em;margin:6px 0;white-space:pre-wrap}
 </style>`);
 // ---- 1. onglets ----
 const P=$('[data-p=adm]'),card=s=>{const e=$(s);return e&&e.closest('.card')};
@@ -23,10 +24,14 @@ function tab(k){$$('#aT button').forEach(b=>b.classList.toggle('on',b.dataset.at
 $('#aT').onclick=e=>{const b=e.target.closest('[data-at]');if(b)tab(b.dataset.at)};tab('dem');
 function place(){const g=$('#gAdm');if(g&&!g.closest('.ap'))pn('grp').append(g)}
 // ---- 2. demandes ----
+const det=d=>{const r=(d.reponses||[]).map(x=>`<li>${esc(x.q)} <b>${esc(x.r)}</b></li>`).join(''),i=d.identite||{};return(r||d.presentation||d.photo)?`<details class="dd"><summary>Voir la demande</summary>${d.photo?`<img class="av" src="${esc(d.photo)}" alt="">`:''}<small>Dans les groupes : ${i.mode==='anonyme'?'anonyme'+(i.surnom?' · surnom « '+esc(i.surnom)+' »':''):'nom visible'}</small><ul>${r}</ul>${d.presentation?`<p>${esc(d.presentation)}</p>`:''}</details>`:''};
+// prix promotionnel saisi au moment de valider (capté avant le gestionnaire existant)
+document.addEventListener('click',e=>{const b=e.target.closest('[data-v="1"]');if(!b)return;const v=prompt('Prix promotionnel en $ (laissez vide s’il n’y a pas de promotion). Annuler = ne pas valider.');
+if(v===null){e.stopImmediatePropagation();e.preventDefault();return}const n=parseFloat(String(v).replace(',','.'));if(n>0)db.collection('demandes').doc(b.dataset.r).update({prixPromo:n}).catch(()=>{})},true);
 async function loadAdm(){place();let n=0;try{const s=await db.collection('demandes').limit(100).get();
 const a=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(x.statut==='en attente'?0:1)-(y.statut==='en attente'?0:1)||(y.cree?.seconds||0)-(x.cree?.seconds||0));
 $('#rq').innerHTML=a.map(d=>{const p=d.statut==='en attente';if(p)n++;const a2=`data-r="${d.id}" data-u="${esc(d.uid)}" data-f="${esc(d.formation)}"`;
-return`<div class="dq ${p?'pend':''}"><div><b>${esc(d.nom)}</b><small>${esc(d.formation)}${d.prix?' · '+d.prix+' $':''}</small><small>${esc(d.email||'')} ${esc(d.tel||'')}</small>${d.note?`<small>${esc(d.note)}</small>`:''}</div><div class="dqa"><span class="bg ${p?'w':d.statut==='validée'?'o':'n'}">${esc(d.statut)}</span>${p?`<button ${a2} data-v="1">Valider</button><button class="ghost" ${a2} data-v="0">Refuser</button>`:''}</div></div>`}).join('')||'<p class="mu">Aucune demande.</p>'}catch(e){}
+return`<div class="dq ${p?'pend':''}"><div><b>${esc(d.nom)}</b><small>${esc(d.formation)}${d.prix?' · '+d.prix+' $':''}</small><small>${esc(d.email||'')} ${esc(d.tel||'')}</small>${d.note?`<small>${esc(d.note)}</small>`:''}${det(d)}</div><div class="dqa"><span class="bg ${p?'w':d.statut==='validée'?'o':'n'}">${esc(d.statut)}</span>${p?`<button ${a2} data-v="1">Valider</button><button class="ghost" ${a2} data-v="0">Refuser</button>`:''}</div></div>`}).join('')||'<p class="mu">Aucune demande.</p>'}catch(e){}
 const i=$('#aT [data-at=dem] i');i.textContent=n;i.hidden=!n;
 if(typeof loadAs==='function')try{loadAs()}catch(e){}
 loadIns();loadSent();loadGR()}
