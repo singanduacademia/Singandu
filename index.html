@@ -335,9 +335,7 @@ nv.addEventListener('click',e=>{if(e.target.closest('a')){nv.classList.remove('o
 /* Services et formations (aucun prix affiché) */
 $('#srv').innerHTML=SERVICES.map(s=>`<div class="card">${s[5]?`<img class="si" src="${encodeURI(s[5].split('|')[0])}" data-alt="${esc(s[5])}" alt="" loading="lazy" onerror="var a=(this.dataset.alt||'').split('|'),i=(+this.dataset.i||0)+1;if(a[i]){this.dataset.i=i;this.src=encodeURI(a[i])}else this.style.display='none'">`:''}<div class="ic"><svg viewBox="0 0 24 24">${IC[s[0]]}</svg></div><h3>${esc(s[1])}</h3><p>${esc(s[2])}</p><a class="btn b4" target="_blank" rel="noopener" href="${s[3]}">${esc(s[4])}</a></div>`).join('');
 const FPH=['Initiation.png|initiation.png|informatique.jpg','bureautique.jpg|conf.jpg','maintenance.jpg|mainte.jpg|tech.jpg','réseau.jpg|reseau.jpg|tech.jpg','web.jpg|gagner.jpg','code.jpg|informatique-1.jpg|micro.jpg','sql.jpg|conf.jpg','design.jpg|design.jpg|graphisme.jpg|portrait.jpg|tech.jpg'];
-$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="${FPH[i]}"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-req="${i}">M’inscrire à cette formation</button></div></div>`).join('');
-
-$('#nbf').textContent=FORMATIONS.length;
+function rendF(){$('#frm').innerHTML=FORMATIONS.map((f,i)=>`<div class="fc" style="transition-delay:${i*.35}s"><div class="bgp" data-img="${FPH[i]}"></div><div class="tx"><h3>${esc(f[0])}</h3><p>${esc(f[1])}</p><button class="btn b3" type="button" data-req="${i}">M’inscrire à cette formation</button></div></div>`).join('');$('#nbf').textContent=FORMATIONS.length}rendF();
 
 /* ================= Annonces et promotions ================= */
 const finMs=a=>{if(!a.fin)return 0;const d=a.fin.toDate?a.fin.toDate():new Date(a.fin);const t=d.getTime();return isNaN(t)?0:t};
@@ -362,8 +360,8 @@ const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const al=(a,b)=>a+Math.random()*(b-a);
 function mouvoir(el,cur){const n={x:al(-4,4),y:al(-4,4),s:al(1.12,1.32)},d=al(9,20)*1000,t=c=>`translate3d(${c.x}%,${c.y}%,0) scale(${c.s})`;
  const a=el.animate([{transform:t(cur)},{transform:t(n)}],{duration:d,easing:'ease-in-out',fill:'forwards'});a.onfinish=()=>mouvoir(el,n)}
-document.querySelectorAll('.bgp').forEach(el=>{const L=el.dataset.img.split('|');let k=0;
- (function essai(){if(k>=L.length)return;const im=new Image(),u=L[k++];im.onload=()=>{el.style.backgroundImage='url("'+encodeURI(u)+'")';if(!RM)mouvoir(el,{x:0,y:0,s:1.15})};im.onerror=essai;im.src=encodeURI(u)})()});
+function peindre(){document.querySelectorAll('.bgp:not([data-ok])').forEach(el=>{el.dataset.ok=1;const L=el.dataset.img.split('|');let k=0;
+ (function essai(){if(k>=L.length)return;const im=new Image(),u=L[k++];im.onload=()=>{el.style.backgroundImage='url("'+encodeURI(u)+'")';if(!RM)mouvoir(el,{x:0,y:0,s:1.15})};im.onerror=essai;im.src=encodeURI(u)})()})}peindre();
 
 /* Formations : apparition puis défilement automatique, rythme variable */
 (function(){const car=$('#frm'),sec=$('#formations');let pause=0,vu=false;
@@ -384,6 +382,12 @@ addEventListener('load',()=>setTimeout(async()=>{try{const [app,F]=await Promise
 const s=await F.getDocs(F.query(F.collection(F.getFirestore(app),'annonces'),F.where('publie','==',true),F.limit(20)));
 const D=s.docs.map(d=>Object.assign({id:d.id},d.data())).sort((x,y)=>((y.cree&&y.cree.seconds)||0)-((x.cree&&x.cree.seconds)||0));
 if(D.length){LISTE=D.concat(LISTE.filter(a=>a.id==='demo'||/^s\d/.test(a.id)));rendre()}}catch(e){}},300));
+
+/* Formations ajoutées par l'administration (collection « catalogue ») : s'ajoutent aux formations de base, même style */
+addEventListener('load',()=>setTimeout(async()=>{try{const [app,F]=await Promise.all([fb(),import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')]);
+const s=await F.getDocs(F.query(F.collection(F.getFirestore(app),'catalogue'),F.limit(30)));
+const D=s.docs.map(d=>d.data()).filter(x=>x.nom).sort((a,b)=>((a.cree&&a.cree.seconds)||0)-((b.cree&&b.cree.seconds)||0));
+if(D.length){D.forEach(x=>{FORMATIONS.push([String(x.nom).slice(0,60),String(x.desc||'').slice(0,140),+x.prix||0]);FPH.push(x.photo||'')});rendF();peindre()}}catch(e){}},500));
 
 /* Vidéo : ne se charge que si on appuie (économise les données) */
 (function(){if(!VIDEO.id)return;$('#videoS').hidden=false;$('#vt').textContent=VIDEO.titre;

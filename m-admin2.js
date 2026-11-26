@@ -15,7 +15,7 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 </style>`);
 // ---- 1. onglets ----
 const P=$('[data-p=adm]'),card=s=>{const e=$(s);return e&&e.closest('.card')};
-const tabs=[['dem','Demandes'],['ins','Inscrits'],['grp','Groupes'],['con','Conseils'],['site','Site'],['ast','Assistant']];
+const tabs=[['dem','Demandes'],['ins','Inscrits'],['grp','Groupes'],['for','Formations'],['con','Conseils'],['site','Site'],['ast','Assistant']];
 P.insertAdjacentHTML('afterbegin','<div id="aT">'+tabs.map(t=>`<button type="button" data-at="${t[0]}">${t[1]}<i hidden></i></button>`).join('')+'</div>'+tabs.map(t=>`<div class="ap" data-ap="${t[0]}" hidden></div>`).join(''));
 const pn=k=>P.querySelector(`[data-ap=${k}]`);
 [['dem','#rq'],['ins','#ins'],['site','#bPub'],['site','#bNo'],['site','#bSj'],['ast','#bSa']].forEach(([k,s])=>{const c=card(s);if(c)pn(k).append(c)});
@@ -32,10 +32,10 @@ if(v===null){e.stopImmediatePropagation();e.preventDefault();return}const n=pars
 async function loadAdm(){place();let n=0;if(!$('#dfT')){$('#rq').insertAdjacentHTML('beforebegin','<div id="dfT"><button class="on" data-df="att" type="button">En attente</button><button data-df="tr" type="button">Traitées</button></div>');$('#dfT').onclick=e=>{const b=e.target.closest('[data-df]');if(!b)return;FD=b.dataset.df;$$('#dfT button').forEach(x=>x.classList.toggle('on',x===b));loadAdm()}}try{const s=await db.collection('demandes').limit(100).get();
 const a=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(x.statut==='en attente'?0:1)-(y.statut==='en attente'?0:1)||(y.cree?.seconds||0)-(x.cree?.seconds||0));
 n=a.filter(d=>d.statut==='en attente').length;$('#rq').innerHTML=a.filter(d=>FD==='tr'?d.statut!=='en attente':d.statut==='en attente').map(d=>{const p=d.statut==='en attente';const a2=`data-r="${d.id}" data-u="${esc(d.uid)}" data-f="${esc(d.formation)}"`;
-return`<div class="dq ${p?'pend':''}"><div><b>${esc(d.nom)}</b><small>${esc(d.formation)}${d.prix?' · '+d.prix+' $':''}</small><small>${esc(d.email||'')} ${esc(d.tel||'')}</small>${d.note?`<small>${esc(d.note)}</small>`:''}${det(d)}</div><div class="dqa"><span class="bg ${p?'w':d.statut==='validée'?'o':'n'}">${esc(d.statut)}</span>${p?`<button ${a2} data-v="1">Valider</button><button class="ghost" ${a2} data-v="0">Refuser</button>`:''}</div></div>`}).join('')||`<p class="mu">${FD==='tr'?'Aucune demande traitée.':'Aucune demande en attente.'}</p>`}catch(e){}
+return`<div class="dq ${p?'pend':''}"><div><b>${esc(d.nom)}</b><small style="font-size:.92em;color:#1b2a8a;font-weight:700">🎓 ${esc(d.formation)}${d.prix?' · '+d.prix+' $':''}</small><small>${esc(d.email||'')} ${esc(d.tel||'')}</small>${d.note?`<small>${esc(d.note)}</small>`:''}${det(d)}</div><div class="dqa"><span class="bg ${p?'w':d.statut==='validée'?'o':'n'}">${esc(d.statut)}</span>${p?`<button ${a2} data-v="1">Valider</button><button class="ghost" ${a2} data-v="0">Refuser</button>`:''}</div></div>`}).join('')||`<p class="mu">${FD==='tr'?'Aucune demande traitée.':'Aucune demande en attente.'}</p>`}catch(e){}
 const i=$('#aT [data-at=dem] i');i.textContent=n;i.hidden=!n;
 if(typeof loadAs==='function')try{loadAs()}catch(e){}
-loadIns();loadSent();loadGR()}
+loadIns();loadSent();loadGR();loadCat()}
 window.loadAdm=loadAdm;
 // ---- 3. inscrits ----
 async function loadIns(){try{const s=await db.collection('etudiants').limit(300).get();ETU=s.docs.map(d=>({uid:d.id,...d.data()})).sort((a,b)=>(b.vu?.seconds||0)-(a.vu?.seconds||0));try{const f=await db.collection('formateurs').get();FM={};f.docs.forEach(d=>FM[d.id]=d.data());window.FMT=f.docs.map(d=>({uid:d.id,...d.data()}));dispatchEvent(new Event('fmt'))}catch(e){}$('#ncnt').textContent='('+ETU.length+')';rnIns();fillT()}catch(e){$('#ins').innerHTML='<p class="mu">Liste indisponible.</p>'}}
@@ -77,4 +77,22 @@ $('#guA').onclick=async()=>{const f=$('#guF').value,M=$('#guM'),n=parseFloat(Str
 try{const s=await db.collection('demandes').where('uid','==',gu.uid).get();if(s.docs.some(d=>d.data().formation===f&&(d.data().statut==='validée'||d.data().statut==='en attente')))return wait(M,'Cet apprenant a déjà cette formation (ou une demande en cours).');
 await db.collection('demandes').add({uid:gu.uid,nom:gu.nom||'',email:gu.email||'',tel:'',formation:f,...(typeof fo[2]==='number'?{prix:fo[2]}:{}),...(n>0?{prixPromo:n}:{}),statut:'validée',attribuee:true,cree:TS()});
 await nt(gu.uid,'Formation attribuée','La formation « '+f+' » vous a été attribuée.');wait(M,'Formation attribuée.');guLoad();loadAdm()}catch(x){wait(M,'Échec : vérifiez les règles Firebase.')}};
+
+// ---- onglet Formations : ajouter une formation (photo, titre, description) qui apparaît aussi sur le site ----
+let BASE=null,CAT=[];
+pn('for').innerHTML=`<div class="card"><h3>Ajouter une formation</h3><label>Photo<input id="cfP" type="file" accept="image/*"></label><img id="cfV" alt="" hidden style="max-width:100%;border-radius:12px;margin:6px 0"><label>Titre<input id="cfT" maxlength="60" placeholder="Ex. : Montage vidéo"></label><label>Description <small id="cfN">0/140</small><textarea id="cfD" maxlength="140" placeholder="Une phrase courte pour donner envie"></textarea></label><label>Prix en $<input id="cfX" inputmode="decimal" placeholder="Ex. : 120"></label><button id="cfA" type="button">Ajouter la formation</button><p class="mu" id="cfM"></p></div><div class="card"><h3>Formations disponibles <span id="cfC"></span></h3><div id="cfL"></div></div>`;
+let cfPh='';
+const mini2=f=>new Promise((ok,ko)=>{const r=new FileReader();r.onerror=ko;r.onload=()=>{const im=new Image();im.onerror=ko;im.onload=()=>{const k=Math.min(1,640/Math.max(im.width,im.height)),w=Math.round(im.width*k),h=Math.round(im.height*k),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);ok(c.toDataURL('image/jpeg',.72))};im.src=r.result};r.readAsDataURL(f)});
+function syncF(){if(!BASE)BASE=F.slice();F.length=0;BASE.concat(CAT.map(c=>[c.nom,c.desc||'',+c.prix||0])).forEach(x=>F.push(x));
+$$('#gaF,#guF').forEach(s=>{const v=s.value;s.innerHTML=F.map(f=>`<option>${esc(f[0])}</option>`).join('');s.value=v})}
+function rnCat(){$('#cfC').textContent='('+((BASE||F).length+CAT.length-(BASE?0:CAT.length))+')';
+$('#cfL').innerHTML=(BASE||F).map(f=>`<div class="ir"><div><b>${esc(f[0])}</b><small>Formation de base</small></div></div>`).join('')+CAT.map(c=>`<div class="ir">${c.photo?`<img class="av" src="${esc(c.photo)}" alt="">`:''}<div><b>${esc(c.nom)}</b><small>${esc(c.desc||'')} · ${+c.prix||0} $</small></div><button class="ghost" data-cd="${esc(c.id)}" type="button">Supprimer</button></div>`).join('')}
+async function loadCat(){try{const s=await db.collection('catalogue').limit(30).get();CAT=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.nom).sort((a,b)=>(a.cree?.seconds||0)-(b.cree?.seconds||0));syncF();rnCat()}catch(e){$('#cfL').innerHTML='<p class="mu">Liste indisponible : ajoutez la règle « catalogue » dans Firebase.</p>'}}
+$('#cfD').oninput=()=>$('#cfN').textContent=$('#cfD').value.length+'/140';
+$('#cfP').onchange=async()=>{const f=$('#cfP').files[0];if(!f)return;try{cfPh=await mini2(f);$('#cfV').src=cfPh;$('#cfV').hidden=false}catch(e){wait($('#cfM'),'Photo illisible.')}};
+$('#cfA').onclick=async()=>{const M=$('#cfM'),nom=$('#cfT').value.trim(),desc=$('#cfD').value.trim(),prix=parseFloat(String($('#cfX').value).replace(',','.'));
+if(nom.length<3)return wait(M,'Écrivez le titre de la formation.');if(desc.length<10)return wait(M,'Écrivez une courte description.');if(!(prix>0))return wait(M,'Indiquez le prix en $.');
+if((BASE||F).concat(CAT.map(c=>[c.nom])).some(f=>String(f[0]).toLowerCase()===nom.toLowerCase()))return wait(M,'Cette formation existe déjà.');
+try{await db.collection('catalogue').add({nom,desc,prix,photo:cfPh,cree:TS()});$('#cfT').value='';$('#cfD').value='';$('#cfX').value='';$('#cfP').value='';$('#cfV').hidden=true;$('#cfN').textContent='0/140';cfPh='';wait(M,'Formation ajoutée. Elle apparaît sur le site.');loadCat()}catch(e){wait(M,'Échec : ajoutez la règle « catalogue » dans Firebase.')}};
+$('#cfL').onclick=async e=>{const b=e.target.closest('[data-cd]');if(!b||!confirm('Supprimer cette formation du site ? Les demandes déjà reçues restent.'))return;try{await db.collection('catalogue').doc(b.dataset.cd).delete();loadCat()}catch(x){wait($('#cfM'),'Échec de la suppression.')}};
 })();
