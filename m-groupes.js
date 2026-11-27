@@ -1,4 +1,4 @@
-// m-groupes.js (v6) — discussion façon WhatsApp : l'apprenant ne voit que son formateur ; le formateur écrit à tous sans voir les noms ; l'admin gère tout
+// m-groupes.js (v7) — discussion façon WhatsApp : l'apprenant ne voit que son formateur ; le formateur écrit à tous sans voir les noms ; l'admin gère tout
 (function(){
 const U=()=>auth.currentUser,isAd=()=>!!U()&&U().email===ADMIN,mail=()=>((U()&&U().email)||'').toLowerCase();
 let cur=null,unM=[],list=[],names={},view='box',box=null,pend='',cache=[],first=true,rec=null,tmr=null,recBase='';
@@ -35,6 +35,7 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .grec i{width:4px;height:8px;border-radius:2px;background:#d93025;animation:gw 1s ease-in-out infinite}.grec i:nth-child(2){animation-delay:.12s}.grec i:nth-child(3){animation-delay:.24s}.grec i:nth-child(4){animation-delay:.36s}.grec i:nth-child(5){animation-delay:.48s}
 .grec span{margin-left:8px;font-variant-numeric:tabular-nums}.grec button{margin-left:auto;border:0;background:transparent;color:#b3261e;font-size:1.1rem;cursor:pointer}
 @keyframes gw{0%,100%{height:6px}50%{height:22px}}
+.gdt{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.gdt label{font-size:.72rem;color:var(--muted)}.gdt input{margin:2px 0 0;padding:8px}.gdr{display:block;margin-top:4px}
 .gmd{float:right;font-size:.8em;padding:4px 10px}.gbc{margin-bottom:10px}
 .gop .ghost,.gpv .ghost{background:#fff;color:#1b2a8a;border:1px solid #1b2a8a}.gop .ghost.on{background:#1b2a8a;color:#fff}#gM .mu{color:#556}.gf input[type=text]::placeholder{color:#8a90a6}
 </style>`);
@@ -83,8 +84,11 @@ $('#gAu').onclick=()=>{try{localStorage.setItem('sa_auto',auto()?'0':'1')}catch(
 $('#gCl').onclick=async()=>{const seen=new Set(),d=[];cache.forEach(m=>{const k=m.uid+'|'+(m.t||'')+'|'+(m.img?m.img.length:0);if(seen.has(k))d.push(m.id);else seen.add(k)});
 if(!d.length)return wait($('#gE'),'Aucun message en double.');if(!confirm(d.length+' message(s) en double seront supprimés. Continuer ?'))return;
 try{const b=db.batch();d.forEach(id=>b.delete(col().doc(id)));await b.commit();wait($('#gE'),d.length+' message(s) supprimé(s).')}catch(e){wait($('#gE'),'Échec de la suppression.')}};
-function members(){$('#gMb').innerHTML=(cur.membres||[]).map(u=>`<div class="card gc" data-mb="${esc(u)}"><b>${esc(lab(u))}</b><small>Ouvrir la boîte</small></div>`).join('')||'<p class="mu">Aucun apprenant dans ce groupe.</p>'}
-$('#gMb').onclick=e=>{const c=e.target.closest('[data-mb]');if(c)go('box',c.dataset.mb)};
+const dur=d=>{if(!d||!d.debut)return'Début non renseigné';const a=new Date(d.debut),n=Math.round(((d.fin?new Date(d.fin):new Date())-a)/864e5);return d.fin?'Durée : '+n+' jour(s)':'En cours depuis '+Math.max(0,n)+' jour(s)'};
+function members(){const dt=cur.dates||{};$('#gMb').innerHTML=(cur.membres||[]).map(u=>{const d=dt[u]||{};return`<div class="card gc" data-mb="${esc(u)}"><b>${esc(lab(u))}</b><small>Ouvrir la boîte</small><div class="gdt"><label>Début<input type="date" data-dt="debut" data-u="${esc(u)}" value="${esc(d.debut||'')}"></label><label>Fin<input type="date" data-dt="fin" data-u="${esc(u)}" value="${esc(d.fin||'')}"></label></div><small class="gdr">${dur(d)}</small></div>`}).join('')||'<p class="mu">Aucun apprenant dans ce groupe.</p>'}
+$('#gMb').addEventListener('change',async e=>{const i=e.target.closest('[data-dt]');if(!i||!cur)return;const u=i.dataset.u,k=i.dataset.dt;cur.dates=cur.dates||{};cur.dates[u]=Object.assign({},cur.dates[u],{[k]:i.value});
+try{await gref().update({['dates.'+u+'.'+k]:i.value})}catch(x){wait($('#gE'),'Date non enregistrée.')}members()});
+$('#gMb').onclick=e=>{if(e.target.closest('label,input'))return;const c=e.target.closest('[data-mb]');if(c)go('box',c.dataset.mb)};
 function paint(ms){const me=U().uid;
 $('#gM').innerHTML=ms.map(m=>{const mine=m.uid===me,h=m.cree?new Date(m.cree.seconds*1e3).toLocaleTimeString('fr',{hour:'2-digit',minute:'2-digit'}):'';
 const who=mine&&!isAd()?'':(esc(m.p||'')+(isAd()&&names[m.uid]?' ('+esc(names[m.uid])+')':''));
@@ -142,19 +146,32 @@ L.innerHTML=s.docs.map(d=>d.data()).filter(d=>d.uid&&!used.has(d.uid)&&!seen[d.u
 function fillProf(){const f=$('#gaF').value,L=(window.FMT||[]).filter(x=>(x.formations||[]).includes(f));
 $('#gaP').innerHTML='<option value="">Sans formateur pour l’instant</option>'+L.map(x=>`<option value="${esc((x.email||'').toLowerCase())}">${esc(x.nom)}</option>`).join('')}
 function admUI(){if(!isAd()||$('#gAdm'))return;
-$('[data-p=adm]').insertAdjacentHTML('afterbegin',`<div class="card" id="gAdm"><h3>Groupes de formation</h3><label>Formation<select id="gaF">${F.map(f=>`<option>${esc(f[0])}</option>`).join('')}</select></label><label>Formateur (selon la spécialité)<select id="gaP"></select></label><b>Apprenants validés</b><div id="gaL" class="mu"></div><button id="gaC" type="button">Créer le groupe</button> <button id="gaD" class="ghost" type="button">Supprimer les groupes en double</button><p class="mu" id="gaM"></p><p class="mu">Le groupe porte le nom de la formation. Chaque apprenant reçoit une boîte privée avec le formateur. Dans l’onglet « Groupes », « Ouvrir le salon » les réunit pour une compétition, et « Revenir en privé » les isole de nouveau.</p></div>`);
-$('#gaF').onchange=()=>{learners();fillProf()};learners();fillProf();addEventListener('fmt',fillProf);
+$('[data-p=adm]').insertAdjacentHTML('afterbegin',`<div class="card" id="gAdm"><h3>Groupes de formation</h3><label>Formation<select id="gaF">${F.map(f=>`<option>${esc(f[0])}</option>`).join('')}</select></label><label>Groupe<select id="gaG"><option value="">➕ Nouveau groupe</option></select></label><label>Formateur (selon la spécialité)<select id="gaP"></select></label><div class="gdt"><label>Début de l’apprenant<input type="date" id="gaDb"></label><label>Fin prévue (facultatif)<input type="date" id="gaFn"></label></div><b>Apprenants validés</b><div id="gaL" class="mu"></div><button id="gaC" type="button">Créer le groupe</button> <button id="gaD" class="ghost" type="button">Supprimer les groupes en double</button><p class="mu" id="gaM"></p><p class="mu">Le groupe porte le nom de la formation. Chaque apprenant reçoit une boîte privée avec le formateur. Dans l’onglet « Groupes », « Ouvrir le salon » les réunit pour une compétition, et « Revenir en privé » les isole de nouveau.</p></div>`);
+let GL=[];
+async function fillGroups(){const f=$('#gaF').value;try{const s=await db.collection('groupes').where('formation','==',f).get();GL=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>((a.cree&&a.cree.seconds)||0)-((b.cree&&b.cree.seconds)||0))}catch(e){GL=[]}
+$('#gaG').innerHTML='<option value="">➕ Nouveau groupe</option>'+GL.map(g=>{const d=g.cree?new Date(g.cree.seconds*1e3).toLocaleDateString('fr'):'';return`<option value="${g.id}">Ajouter au groupe du ${d} (${(g.membres||[]).length} apprenant(s))</option>`}).join('');syncG()}
+function syncG(){const g=GL.find(x=>x.id===$('#gaG').value);$('#gaP').disabled=!!g;if(g)$('#gaP').value=g.profEmail||'';$('#gaC').textContent=g?'Ajouter au groupe':'Créer le groupe'}
+$('#gaDb').value=new Date().toISOString().slice(0,10);
+$('#gaG').onchange=syncG;
+$('#gaF').onchange=()=>{learners();fillProf();fillGroups()};learners();fillProf();fillGroups();addEventListener('fmt',()=>{fillProf();syncG()});
 let busy=false;
 $('#gaC').onclick=async()=>{if(busy)return;const M=$('#gaM'),B=$('#gaC'),ch=$$('#gaL input:checked'),pe=$('#gaP').value.trim().toLowerCase(),f=$('#gaF').value;
 if(!ch.length)return wait(M,'Sélectionnez au moins un apprenant.');
-busy=true;B.disabled=true;wait(M,'Création en cours…');
+busy=true;B.disabled=true;wait(M,'Enregistrement…');const gid=$('#gaG').value,d0=$('#gaDb').value||new Date().toISOString().slice(0,10),d1=$('#gaFn').value||'';
 try{const gs=await db.collection('groupes').where('formation','==',f).get(),used=new Set();gs.docs.forEach(g=>(g.data().membres||[]).forEach(u=>used.add(u)));
+if(gid){if(ch.some(c=>used.has(c.dataset.u))){learners();return wait(M,'Un de ces apprenants a déjà un groupe pour cette formation.')}
+const ref=db.collection('groupes').doc(gid),sn=await ref.get();if(!sn.exists)throw new Error('absent');const g0=sn.data(),base=(g0.membres||[]).length,up={},nm={};
+ch.forEach((c,i)=>{const u=c.dataset.u,vis=c.dataset.m==='visible';up['pseudos.'+u]=vis?(c.dataset.n||'Apprenant '+(base+i+1)):(c.dataset.s||'Apprenant '+(base+i+1));up['anon.'+u]=!vis;up['dates.'+u]={debut:d0,fin:d1};nm[u]=c.dataset.n});
+up.membres=firebase.firestore.FieldValue.arrayUnion(...ch.map(c=>c.dataset.u));
+const b2=db.batch();b2.update(ref,up);b2.set(db.collection('groupes_admin').doc(gid),{noms:nm},{merge:true});
+ch.forEach(c=>b2.set(db.collection('notifs').doc(),{to:c.dataset.u,titre:'Nouveau groupe',texte:'Vous avez été ajouté au groupe « '+f+' ». Ouvrez l’onglet Groupes.',cree:TS()}));
+await b2.commit();wait(M,ch.length+' apprenant(s) ajouté(s) au groupe.');learners();fillGroups();return}
 if(ch.some(c=>used.has(c.dataset.u))){learners();return wait(M,'Un de ces apprenants a déjà un groupe pour cette formation.')}
-const membres=[],pseudos={},anon={},noms={};ch.forEach((c,i)=>{const u=c.dataset.u,vis=c.dataset.m==='visible';membres.push(u);pseudos[u]=vis?(c.dataset.n||'Apprenant '+(i+1)):(c.dataset.s||'Apprenant '+(i+1));anon[u]=!vis;noms[u]=c.dataset.n});
+const membres=[],pseudos={},anon={},noms={},dates={};ch.forEach((c,i)=>{const u=c.dataset.u,vis=c.dataset.m==='visible';membres.push(u);pseudos[u]=vis?(c.dataset.n||'Apprenant '+(i+1)):(c.dataset.s||'Apprenant '+(i+1));anon[u]=!vis;noms[u]=c.dataset.n;dates[u]={debut:d0,fin:d1}});
 const ref=db.collection('groupes').doc(),b=db.batch();
-b.set(ref,{formation:f,profEmail:pe,membres,pseudos,anon,mode:'prive',cree:TS()});b.set(db.collection('groupes_admin').doc(ref.id),{noms});
+b.set(ref,{formation:f,profEmail:pe,membres,pseudos,anon,dates,mode:'prive',cree:TS()});b.set(db.collection('groupes_admin').doc(ref.id),{noms});
 membres.forEach(u=>b.set(db.collection('notifs').doc(),{to:u,titre:'Nouveau groupe',texte:'Vous avez été ajouté au groupe « '+f+' ». Ouvrez l’onglet Groupes.',cree:TS()}));
-await b.commit();wait(M,'Groupe créé.');learners()}
+await b.commit();wait(M,'Groupe créé.');learners();fillGroups()}
 catch(e){wait(M,'Échec : rien n’a été créé. Vérifiez les règles Firebase.')}
 finally{busy=false;B.disabled=false}};
 $('#gaD').onclick=async()=>{const M=$('#gaM');if(!confirm('Supprimer les groupes en double (même formation, mêmes apprenants) ? Un seul sera gardé.'))return;

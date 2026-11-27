@@ -1,5 +1,8 @@
 // m-compte.js (v1) — onglet Compte façon « Paramètres » : profil discret, réglages alignés, une seule liste claire
 (function(){
+const COL=[['#1c2cb0','Bleu'],['#6a1fb0','Violet'],['#0f7a4a','Vert'],['#b3261e','Rouge'],['#b85500','Orange']];
+const setCol=x=>document.documentElement.style.setProperty('--blue',x);
+try{const s=localStorage.getItem('sa_col');if(s)setCol(s)}catch(e){}
 const P=document.querySelector('[data-p="acc"]');if(!P)return;
 document.head.insertAdjacentHTML('beforeend',`<style>
 [data-p="acc"] .sh{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin:18px 8px 6px}
@@ -9,6 +12,7 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 [data-p="acc"] .srow::after{content:'›';margin-left:auto;opacity:.5;font-size:1.4em;line-height:1}
 [data-p="acc"] .srow.out{color:#e5484d!important}[data-p="acc"] .srow.out::after{content:''}
 #bSh::before{content:'📤'}#bSite::before{content:'🌐'}#bInst::before{content:'📲'}#bOut::before{content:'🚪'}
+.spcl{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0}.spcl div{display:flex;gap:10px}.spcl .sw{width:34px;height:34px;padding:0;border-radius:50%;border:3px solid transparent}.spcl .sw.on{border-color:var(--ink)}
 .spf{display:flex;align-items:center;gap:14px}
 .spa{width:58px;height:58px;border-radius:50%;overflow:hidden;background:#2f5be6;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;flex:none}.spa img{width:100%;height:100%;object-fit:cover}
 .spt{flex:1;min-width:0}.spt h3{margin:0 0 2px}.spe{display:flex;align-items:center;gap:8px;font-size:.88rem;opacity:.8}.spe button{border:0;background:transparent;color:inherit;text-decoration:underline;font:inherit;font-size:.82rem;cursor:pointer;padding:0}
@@ -42,7 +46,10 @@ const reqCard=my?my.closest('.card'):null;
 const wrap=document.createElement('div');wrap.className='setl';
 wrap.append(pf);
 if(reqCard)wrap.append(sec('Mes demandes'),reqCard);
-wrap.append(sec('Apparence'),grp(bTh),sec('Application'),grp(bInst,bSh,bSite),sec('Session'),grp(bOut));
+const cs=document.createElement('div');cs.className='card';let cur='';try{cur=localStorage.getItem('sa_col')||''}catch(e){}
+cs.innerHTML='<div class="spcl"><b>Couleur</b><div>'+COL.map(x=>`<button type="button" class="sw${(cur||COL[0][0])===x[0]?' on':''}" data-c="${x[0]}" style="background:${x[0]}" aria-label="${x[1]}"></button>`).join('')+'</div></div>';
+cs.onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;setCol(b.dataset.c);try{localStorage.setItem('sa_col',b.dataset.c)}catch(x){}cs.querySelectorAll('.sw').forEach(s=>s.classList.toggle('on',s===b))};
+wrap.append(sec('Apparence'),grp(bTh),cs,sec('Application'),grp(bInst,bSh,bSite),sec('Session'),grp(bOut));
 const h=reqCard&&reqCard.querySelector('h3');if(h)h.hidden=true;
 P.prepend(wrap);
 [...P.children].forEach(c=>{if(c!==wrap&&!c.contains(wrap)&&c.classList.contains('card')&&!c.querySelector('button,#my,#nm'))c.remove()});
