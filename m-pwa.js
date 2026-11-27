@@ -28,3 +28,15 @@ if(t.closest('#bInst,#bInst2')){e.preventDefault();e.stopImmediatePropagation();
 if(ios&&!standalone())setTimeout(bar,2500);
 else if(!standalone())setTimeout(()=>{if(!ip)bar()},4000);
 })();
+
+// ---- mise à jour automatique : plus besoin de désinstaller ----
+(function(){if(!('serviceWorker' in navigator))return;
+const had=!!navigator.serviceWorker.controller;let done=false;
+const rl=()=>{if(done)return;done=true;location.reload()};
+navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)rl()});
+navigator.serviceWorker.addEventListener('message',e=>{if(had&&e.data&&e.data.maj)rl()});
+navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{});
+const chk=()=>navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk()});
+setInterval(chk,30*60*1000);chk();
+})();
