@@ -1,5 +1,9 @@
 // m-admin.js
 $('#pk').onchange=()=>{const a=$('#pk').value;$('#px').maxLength=a==='annonce'?160:a==='story'?140:5000;$('#pdw').hidden=a!=='session';$('#pbw').hidden=a!=='story'};
+// Prix et fin de promotion : champs ajoutés pour les annonces (affichés sur le site)
+(function(){const px=$('#px');if(!px||$('#pap'))return;const L=px.closest('label')||px;
+L.insertAdjacentHTML('afterend','<div id="pap" hidden><label>Prix avant la promotion ($, facultatif)<input id="pa1" inputmode="decimal"></label><label>Prix promotionnel ($, facultatif)<input id="pa2" inputmode="decimal"></label><label>Fin de la promotion (facultatif)<input id="pa3" type="datetime-local"></label></div>');
+const sh=()=>{$('#pap').hidden=$('#pk').value!=='annonce'};$('#pk').addEventListener('change',sh);sh()})();
 // Compression locale : renvoie une image JPEG en texte, sous ~450 Ko (limite Firestore : 1 Mo par document)
 async function miniPost(file,maxW=1100){
   let bmp;try{bmp=await createImageBitmap(file)}catch(e){throw new Error('image-illisible')}
@@ -14,7 +18,14 @@ $('#bPub').onclick=async()=>{const m=$('#mp'),B=$('#bPub'),k=$('#pk').value,t=$(
 B.disabled=true;wait(m,f?'Préparation de la photo…':'Publication…');
 try{const img=f?await miniPost(f):'';
 await db.collection('posts').add({type:k,titre:t,texte:x,exp:k==='story'?Date.now()+864e5:0,bg:($('#pb')||{}).value||'',date:k==='session'?($('#pd').value||''):'',image:img,video:($('#pv')||{}).value?$('#pv').value.trim():'',comOk:!!($('#pc')&&$('#pc').checked),shareOk:!!($('#ps')&&$('#ps').checked),likes:[],c:[],cree:TS()});
-wait(m,'Publié.');['pt','px','pd','pv'].forEach(i=>{const e=$('#'+i);if(e)e.value=''});$('#pf').value='';loadPosts()}
+let site='';
+if(k==='annonce'||k==='session'){try{const pa=parseFloat(String(($('#pa1')||{}).value||'').replace(',','.')),pp=parseFloat(String(($('#pa2')||{}).value||'').replace(',','.')),pf=($('#pa3')||{}).value||'';
+const an={tag:k==='session'?'Session':(!isNaN(pp)?'Promotion':'Annonce'),titre:t||'Annonce',texte:x,publie:true,cree:TS()};
+if(img)an.image=img;if(k==='session'&&$('#pd').value)an.date=new Date($('#pd').value).toLocaleString('fr',{dateStyle:'long',timeStyle:'short'});
+if(k==='annonce'&&!isNaN(pp)){an.prixPromo=pp;if(!isNaN(pa))an.prixAvant=pa;if(pf)an.fin=new Date(pf).toISOString()}
+const vv=($('#pv')||{}).value?$('#pv').value.trim():'';if(vv&&/^https?:/.test(vv)){an.lien=vv;an.bouton='Voir la vidéo'}
+await db.collection('annonces').add(an);site=' Visible aussi sur le site.'}catch(e2){console.error('Annonce site :',e2);site=' Attention : pas envoyée sur le site ('+((e2&&e2.code)||'erreur')+').'}}
+wait(m,'Publié dans l’application.'+site);['pa1','pa2','pa3'].forEach(i=>{const e=$('#'+i);if(e)e.value=''});['pt','px','pd','pv'].forEach(i=>{const e=$('#'+i);if(e)e.value=''});$('#pf').value='';loadPosts()}
 catch(e){const c=(e&&(e.code||e.message))||'inconnue';console.error('Publication :',e);
 const h={'permission-denied':'accès refusé : reconnectez-vous avec le compte admin (e-mail vérifié) et vérifiez les règles « posts »','image-illisible':'photo illisible, essayez un autre fichier','image-trop-lourde':'photo trop lourde même compressée','unavailable':'connexion instable, réessayez','invalid-argument':'donnée invalide dans le formulaire'}[e&&(e.code||e.message)]||'';
 wait(m,'Échec ('+c+')'+(h?' : '+h:'')+'.')}
