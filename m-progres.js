@@ -1,20 +1,21 @@
-// m-progres.js — ma progression + avis à l'administration (3 par formation), en haut de l'onglet Apprendre
+// m-progres.js — ma formation en cours, niveaux + avis à l'administration (3 par formation), en haut de l'onglet Apprendre
 (function(){
 const U=()=>auth.currentUser,isAd=()=>!!U()&&U().email===ADMIN;
 const nz=t=>String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’']/g,"'").trim();
 const slug=t=>nz(t).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 document.head.insertAdjacentHTML('beforeend',`<style>
-.pgf{padding:12px 0;border-top:1px solid #e3e8ff}.pgf:first-of-type{border-top:0}
-.pgb{height:10px;border-radius:6px;background:#e3e8ff;margin:8px 0 4px;overflow:hidden}.pgb i{display:block;height:100%;background:linear-gradient(90deg,#1b2a8a,#2f5be6);border-radius:6px}
-.pga{display:flex;align-items:center;gap:10px;margin-top:8px}.pga small{color:#667}
-.pgx{margin-top:8px}.pgx textarea{width:100%;box-sizing:border-box;border:1.5px solid #dbe3ff;border-radius:12px;padding:10px;font:inherit}
+.pgf{padding:12px 0;border-top:1px solid rgba(128,128,128,.25)}.pgf:first-of-type{border-top:0}
+.pgt{display:inline-block;background:var(--blue);color:#fff;border-radius:999px;font-size:.7rem;font-weight:700;padding:2px 10px;margin-bottom:4px}
+.pgl{display:flex;gap:6px;margin:8px 0 6px}.pgl i{flex:1;height:10px;border-radius:6px;background:var(--sky)}.pgl i.on{background:var(--blue)}
+.pga{display:flex;align-items:center;gap:10px;margin-top:8px}.pga small,.pgf>small{color:var(--muted)}
+.pgx{margin-top:8px}.pgx textarea{margin:0}
 </style>`);
-function ensure(){const h=$('[data-p=form]');if(!h||$('#pgC'))return;h.insertAdjacentHTML('afterbegin','<div class="card" id="pgC"><h3>Ma progression</h3><div id="pgL" class="mu">Chargement…</div></div>')}
+function ensure(){const h=$('[data-p=form]');if(!h||$('#pgC'))return;h.insertAdjacentHTML('afterbegin','<div class="card" id="pgC"><h3>Ma formation</h3><div id="pgL" class="mu">Chargement…</div></div>')}
 async function load(){const u=U();if(!u||isAd())return;ensure();const L=$('#pgL');if(!L)return;
 try{const[d,a,v]=await Promise.all([db.collection('demandes').where('uid','==',u.uid).get(),db.collection('avancement').doc(u.uid).get().catch(()=>null),db.collection('avis').where('uid','==',u.uid).get().catch(()=>({docs:[]}))]);
-const fs=[...new Set(d.docs.map(x=>x.data()).filter(x=>x.statut==='validée').map(x=>x.formation))],av=(a&&a.exists&&a.data())||{},nb={};
+const vs=d.docs.map(x=>x.data()).filter(x=>x.statut==='validée'&&x.type!=='dépannage').sort((a,b)=>((b.cree&&b.cree.seconds)||0)-((a.cree&&a.cree.seconds)||0)),fs=[...new Set(vs.map(x=>x.formation))],lv=p=>p>=100?4:Math.min(4,1+Math.floor(p/25)),av=(a&&a.exists&&a.data())||{},nb={};
 v.docs.forEach(x=>{const f=x.data().formation;nb[f]=(nb[f]||0)+1});
-L.innerHTML=fs.map(f=>{const p=Math.max(0,Math.min(100,+av[slug(f)]||0)),n=nb[f]||0;return`<div class="pgf"><b>${esc(f)}</b><div class="pgb"><i style="width:${p}%"></i></div><small>${p} % accompli</small><div class="pga"><button class="ghost" data-pf="${esc(f)}" type="button"${n>=3?' disabled':''}>Signaler un blocage</button><small>${n}/3 avis envoyés</small></div><div class="pgx" hidden></div></div>`}).join('')||'<p class="mu">Ta progression apparaîtra ici dès que ta demande de formation sera validée.</p>'}
+L.innerHTML=fs.map((f,k)=>{const p=Math.max(0,Math.min(100,+av[slug(f)]||0)),n=nb[f]||0,l=lv(p);return`<div class="pgf">${k===0?'<span class="pgt">En cours</span><br>':''}<b>${esc(f)}</b><div class="pgl">${[1,2,3,4].map(i=>`<i class="${i<=l?'on':''}"></i>`).join('')}</div><small>${p>=100?'Formation terminée':'Niveau '+l+' sur 4 · '+p+' %'}</small><div class="pga"><button class="ghost" data-pf="${esc(f)}" type="button"${n>=3?' disabled':''}>Signaler un blocage</button><small>${n}/3 avis envoyés</small></div><div class="pgx" hidden></div></div>`}).join('')||'<p class="mu">Ta progression apparaîtra ici dès que ta demande de formation sera validée.</p>'}
 catch(e){L.textContent='Progression indisponible.'}}
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-pf]'),s=e.target.closest('[data-pS]'),c=e.target.closest('[data-pC]');
 if(b){const x=b.closest('.pgf').querySelector('.pgx');x.hidden=!x.hidden;if(!x.hidden){x.innerHTML='<textarea rows="3" maxlength="400" placeholder="Qu’est-ce qui n’avance pas ? Explique en quelques mots."></textarea><div class="pga"><button type="button" data-pS="'+esc(b.dataset.pf)+'">Envoyer à l’administration</button><button class="ghost" type="button" data-pC="1">Annuler</button></div><p class="mu"></p>'}return}

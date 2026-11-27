@@ -1,9 +1,11 @@
 // m-parcours.js : accueil avec Sibot, chemin d'apprentissage, leçons (5 exercices variés), points et série
 (function(){
+document.head.insertAdjacentHTML('beforeend','<style>.pn .nn{font-size:1.2rem;font-weight:700;color:#fff;line-height:1}.tp.lv{background:var(--sky);color:var(--ink)}</style>');
 let P={parcours:null,domaine:'',lecons:{},xp:0,serie:{n:0,d:''}},loaded=false,open=false,pick=null;
-let L=null,Q=[],qi=0,ok1=0,cur=null,answered=false,st={},tipId=null;
+let CF="",L=null,Q=[],qi=0,ok1=0,cur=null,answered=false,st={},tipId=null;
 const root=()=>$('#ap');
 const KEY=()=>'sa_prog2_'+(me?me.uid:'x');
+const niv=()=>1+Math.floor((P.xp||0)/100);
 const prenom=()=>(((typeof user==='string'&&user)||(me&&me.displayName)||'').split(' ')[0])||'';
 const LESS=[];CONTENU.niveaux.forEach(n=>n.chapitres.forEach(c=>c.lecons.forEach(l=>{l._c=c;l._n=n;LESS.push(l)})));
 const LET='ABCD',GOOD=['Très bien !','Exactement !','Bravo, continuons.','C’est ça !','Parfait !'];
@@ -41,6 +43,7 @@ const blank=()=>({parcours:null,domaine:'',lecons:{},xp:0,serie:{n:0,d:''}});
 async function load(){P=blank();let loc=null;try{loc=JSON.parse(localStorage.getItem(KEY())||'null')}catch(e){}
 try{const d=await db.collection('progression').doc(me.uid).get();if(d.exists){const x=d.data();P=Object.assign(blank(),{parcours:x.parcours||null,domaine:x.domaine||'',lecons:x.lecons||{},xp:x.xp||0,serie:x.serie||{n:0,d:''}})}else if(loc)P=Object.assign(P,loc)}
 catch(e){if(loc)P=Object.assign(P,loc)}
+try{const q=await db.collection('demandes').where('uid','==',me.uid).get();const v=q.docs.map(d=>d.data()).filter(x=>x.type==='formation'&&x.statut==='validée').sort((a,b)=>((b.cree&&b.cree.seconds)||0)-((a.cree&&a.cree.seconds)||0));CF=v[0]?v[0].formation:''}catch(e){CF=''}
 loaded=true}
 function save(){try{localStorage.setItem(KEY(),JSON.stringify(P))}catch(e){}
 try{db.collection('progression').doc(me.uid).set({parcours:P.parcours,domaine:P.domaine,lecons:P.lecons,xp:P.xp,serie:P.serie,maj:TS()},{merge:true}).catch(()=>{})}catch(e){}}
@@ -63,13 +66,13 @@ function chemin(){
 const done=LESS.filter(l=>P.lecons[l.id]).length,first=LESS.find((l,i)=>!P.lecons[l.id]);
 const nom=P.parcours==='domaine'?'Informatique pour '+esc(P.domaine):'Informatique générale';
 const photo=me&&me.photoURL;
-let h=`<div class="apw"><div class="pt"><span class="tav">${photo?`<img src="${esc(photo)}" alt="">`:esc((prenom()[0]||'S').toUpperCase())}</span><span class="tp f">🔥 ${serieNow()}</span><span class="tp">⭐ ${P.xp||0}</span></div>
-<div class="unit"><div><small>${esc(CONTENU.niveaux[0].titre.split(' · ')[0])} · ${nom}</small><b>${esc(CONTENU.titre)}</b></div><button class="chg" type="button" data-chg="1">Changer</button></div>`;
+let h=`<div class="apw"><div class="pt"><span class="tav">${photo?`<img src="${esc(photo)}" alt="">`:esc((prenom()[0]||'S').toUpperCase())}</span><span class="tp f">🔥 ${serieNow()}</span><span class="tp lv">Niveau ${niv()}</span></div>
+<div class="unit"><div><small>Ma formation en cours</small><b>${esc(CF||'Aucune formation validée')}</b><small>Entraînement avec Sibot · ${nom}</small></div><button class="chg" type="button" data-chg="1">Changer</button></div>`;
 CONTENU.niveaux.forEach(n=>n.chapitres.forEach(c=>{
  const dn=c.lecons.filter(l=>P.lecons[l.id]).length,all=dn===c.lecons.length;
  h+=`<h3 class="chp">Chapitre · ${esc(c.titre)}</h3><div class="bar sm"><i style="width:${Math.round(dn/c.lecons.length*100)}%"></i></div><div class="path">`;
  c.lecons.forEach((l,i)=>{const d=P.lecons[l.id],prev=LESS.indexOf(l)===0||P.lecons[LESS[LESS.indexOf(l)-1].id],s=d?'done':prev?'cur':'lock';
-  h+=`<div class="ndw z${i%4}"><button class="pn ${s}" type="button" data-n="${l.id}" aria-label="${esc(l.titre)}">${d?IC.check:s==='lock'?IC.lock:IC.star}</button>
+  h+=`<div class="ndw z${i%4}"><button class="pn ${s}" type="button" data-n="${l.id}" aria-label="${esc(l.titre)}">${d?IC.check:s==='lock'?IC.lock:'<b class="nn">'+(i+1)+'</b>'}</button>
   <div class="tip ${s==='lock'?'off':''}" data-t="${l.id}" ${tipId===l.id||(tipId===null&&first&&first.id===l.id)?'':'hidden'}><b>${esc(l.titre)}</b><small>Leçon ${i+1} sur ${c.lecons.length}${d?' · Maîtrise '+Math.round(d.s/d.n*100)+' %':''}</small>
   ${s==='lock'?'<small>Termine d’abord la leçon précédente.</small>':`<button type="button" data-start="${l.id}">${d?'Refaire · +10 XP':'Commencer · +25 XP'}</button>`}</div></div>`});
  h+=`<div class="ndw z0"><button class="pn chest ${all?'cur':'lock'}" type="button" data-chest="1" aria-label="Coffre du chapitre">${IC.chest}</button><div class="tip ${all?'':'off'}" data-t="chest" hidden><b>Coffre du chapitre</b><small>${all?'Bravo, chapitre terminé ! Le PDF du chapitre arrive bientôt.':'Termine les '+c.lecons.length+' leçons pour ouvrir le coffre.'}</small></div></div></div>`}));
