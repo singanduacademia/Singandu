@@ -1,4 +1,4 @@
-const V='singandu-v20';
+const V='singandu-v21';
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',e=>e.waitUntil(
 caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x))))
@@ -11,3 +11,7 @@ e.respondWith(fetch(r,{cache:'no-store'}).then(x=>{if(x&&x.ok){const c=x.clone()
 
 self.addEventListener('notificationclick',e=>{e.notification.close();const de=e.notification.data&&e.notification.data.de;
 e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{for(const c of l){if('focus' in c){c.postMessage({open:de});return c.focus()}}return clients.openWindow('./')}))});
+
+// Notification push reçue (même application fermée)
+self.addEventListener('push',e=>{let d={};try{d=e.data?e.data.json():{}}catch(x){d={titre:'Singandu Academia',texte:e.data?e.data.text():''}}
+e.waitUntil(self.registration.showNotification(d.titre||'Singandu Academia',{body:d.texte||'',icon:'icon-192.png',badge:'icon-192.png',vibrate:[120,60,120],data:{de:d.de||''}}))});
