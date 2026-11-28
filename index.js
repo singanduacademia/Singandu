@@ -6,7 +6,7 @@ const webpush=require('web-push');
 admin.initializeApp();
 
 const VAPID_PRIVATE=defineSecret('VAPID_PRIVATE');
-const VAPID_PUBLIC='COLLEZ_ICI_LA_CLE_PUBLIQUE';   // la même que dans m-push.js
+const VAPID_PUBLIC='BPVhQpAHHFSicyKn1pJkWB9N1eMn1Ek75NUYWJfdqMTvjtV7nUVGxlj44Pxj05Gko0-sbTJumj860oLdaQVf8pU';   // la même que dans m-push.js
 
 exports.pushNotif=onDocumentCreated(
   {document:'notifs/{id}',secrets:[VAPID_PRIVATE],region:'europe-west1',maxInstances:3},
